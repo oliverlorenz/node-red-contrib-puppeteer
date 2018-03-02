@@ -1,0 +1,41 @@
+{
+  "name": "node-red-contrib-puppeteer",
+  "version": "0.0.1",
+  "description": "NodeRED nodes to control a headless chrome with puppeteer",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "Oliver Lorenz <mail@oliverlorenz.com>",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^1.1.1"
+  },
+  "bugs": {
+    "url": "https://github.com/oliverlorenz/node-red-contrib-puppeteer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oliverlorenz/node-red-contrib-puppeteer"
+  },
+  "keywords": [
+    "chrome",
+    "browser automation",
+    "puppeteer"
+  ],
+  "node-red": {
+    "nodes": {
+      "puppeteer-browser-launch": "puppeteer/browser/launch.js",
+      "puppeteer-browser-close": "puppeteer/browser/close.js",
+      "puppeteer-browser-newPage": "puppeteer/browser/newPage.js",
+      "puppeteer-page-goto": "puppeteer/page/goto.js",
+      "puppeteer-page-screenshot": "puppeteer/page/screenshot.js",
+      "puppeteer-page-content": "puppeteer/page/content.js",
+      "puppeteer-page-click": "puppeteer/page/click.js",
+      "puppeteer-page-focus": "puppeteer/page/focus.js",
+      "puppeteer-page-waitFor": "puppeteer/page/waitFor.js",
+      "puppeteer-page-close": "puppeteer/page/close.js",
+      "puppeteer-page-keyboard-type": "puppeteer/page/keyboard/type.js",
+      "puppeteer-page-keyboard-press": "puppeteer/page/keyboard/press.js"
+    }
+  }
+}

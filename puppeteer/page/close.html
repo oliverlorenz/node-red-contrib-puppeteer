@@ -1,0 +1,21 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-page-close', {
+      category: 'puppeteerpage',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: '' }
+      },
+      inputs:1,
+      outputs:1,
+      label: function() {
+          return this.name || "close";
+      },
+      paletteLabel: "close"
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-page-close">
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-page-close">
+</script>

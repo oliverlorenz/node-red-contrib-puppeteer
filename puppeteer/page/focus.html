@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-page-focus', {
+      category: 'puppeteerpage',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: '' },
+        selector:  { value: '', required: true }
+      },
+      inputs:1,
+      outputs:1,
+      label: function() {
+          return this.name || "focus";
+      },
+      paletteLabel: "focus"
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-page-focus">
+  <div class="form-row">
+    <label for="node-input-selector">selector</label>
+    <input id="node-input-selector"></input>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-page-focus">
+</script>

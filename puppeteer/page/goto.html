@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-page-goto', {
+      category: 'puppeteerpage',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: '' },
+        url:  { value: '', required: true }
+      },
+      inputs:1,
+      outputs:1,
+      label: function() {
+          return this.name || "goto";
+      },
+      paletteLabel: "goto"
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-page-goto">
+  <div class="form-row">
+    <label for="node-input-url">url</label>
+    <input id="node-input-url"></input>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-page-goto">
+</script>

@@ -1,0 +1,29 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-browser-launch', {
+      category: 'puppeteerbrowser',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: ''},
+        headless: { value: true, require: true }
+      },
+      inputs:1,
+      outputs:1,
+      label: function() {
+          return this.name || "launch";
+      },
+      paletteLabel: "launch"
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-browser-launch">
+  <div class="form-row">
+    <label for="node-input-headless"><i class="fa fa-random"></i> Headless</label>
+    <select type="text" id="node-input-headless" style="width:70%;">
+        <option value="1">headless</option>
+        <option value="0">visible</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-browser-launch">
+</script>

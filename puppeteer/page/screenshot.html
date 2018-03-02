@@ -1,0 +1,21 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-page-screenshot', {
+      category: 'puppeteerpage',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: '' }
+      },
+      inputs:1,
+      outputs:1,
+      label: function() {
+          return this.name || "screenshot";
+      },
+      paletteLabel: "screenshot"
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-page-screenshot">
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-page-screenshot">
+</script>
