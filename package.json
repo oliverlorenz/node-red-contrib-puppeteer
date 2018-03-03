@@ -34,7 +34,8 @@
       "puppeteer-page-waitFor": "puppeteer/page/waitFor.js",
       "puppeteer-page-close": "puppeteer/page/close.js",
       "puppeteer-page-keyboard-type": "puppeteer/page/keyboard/type.js",
-      "puppeteer-page-keyboard-press": "puppeteer/page/keyboard/press.js"
+      "puppeteer-page-keyboard-press": "puppeteer/page/keyboard/press.js",
+      "puppeteer-page-querySelector": "puppeteer/page/querySelector.js"
     }
   }
 }

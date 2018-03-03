@@ -1,0 +1,36 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-page-document-querySelector', {
+      category: 'puppeteerdocument',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: '' },
+        selector:  { value: '', required: true },
+        property:  { value: 'innerText', required: true }
+      },
+      inputs:1,
+      outputs:1,
+      icon: "fa-file-code-o.png",
+      label: function() {
+          return this.name || "querySelector";
+      },
+      paletteLabel: "querySelector"
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-page-document-querySelector">
+  <div class="form-row">
+      <label for="node-input-selector">selector</label>
+      <input id="node-input-selector"></input>
+  </div>
+  <div class="form-row">
+      <label for="node-input-property">property</label>
+      <input id="node-input-property"></input>
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-page-document-querySelector">
+</script>
