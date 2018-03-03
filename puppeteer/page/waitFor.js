@@ -14,6 +14,9 @@ module.exports = function (RED) {
           node.error(err)
         }) 
     })
+    oneditprepare: function oneditprepare() {
+      $("#node-input-name").val(this.name)
+    }
   }
   RED.nodes.registerType('puppeteer-page-waitFor', PuppeteerPageWaitFor)
 }

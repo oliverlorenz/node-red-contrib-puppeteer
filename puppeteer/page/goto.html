@@ -8,6 +8,7 @@
       },
       inputs:1,
       outputs:1,
+      icon: "fa-file-code-o.png",
       label: function() {
           return this.name || "goto";
       },
@@ -19,6 +20,10 @@
   <div class="form-row">
     <label for="node-input-url">url</label>
     <input id="node-input-url"></input>
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
   </div>
 </script>
 

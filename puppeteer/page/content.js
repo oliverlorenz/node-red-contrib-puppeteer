@@ -11,6 +11,9 @@ module.exports = function (RED) {
           node.send(msg) 
         })  
     })
+    oneditprepare: function oneditprepare() {
+      $("#node-input-name").val(this.name)
+    }
   }
   RED.nodes.registerType('puppeteer-page-content', PuppeteerPageContent)
 }

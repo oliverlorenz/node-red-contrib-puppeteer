@@ -7,6 +7,7 @@
       },
       inputs:1,
       outputs:1,
+      icon: "fa-file-code-o.png",
       label: function() {
           return this.name || "screenshot";
       },
@@ -15,6 +16,10 @@
 </script>
 
 <script type="text/x-red" data-template-name="puppeteer-page-screenshot">
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="puppeteer-page-screenshot">

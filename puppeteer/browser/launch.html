@@ -4,10 +4,12 @@
       color: '#8BBDD9',
       defaults: {
         name: { value: ''},
-        headless: { value: true, require: true }
+        headless: { value: true, require: true },
+        slowMo: { value: undefined }
       },
       inputs:1,
       outputs:1,
+      icon: "fa-chrome.png",
       label: function() {
           return this.name || "launch";
       },
@@ -16,13 +18,21 @@
 </script>
 
 <script type="text/x-red" data-template-name="puppeteer-browser-launch">
-  <div class="form-row">
-    <label for="node-input-headless"><i class="fa fa-random"></i> Headless</label>
-    <select type="text" id="node-input-headless" style="width:70%;">
-        <option value="1">headless</option>
-        <option value="0">visible</option>
-    </select>
-  </div>
+    <div class="form-row">
+        <label for="node-input-headless"><i class="fa fa-cogs"></i> Run Headless</label>
+        <select type="boolean" id="node-input-headless" style="width:70%;">
+            <option value="1">yes</option>
+            <option value="0">no</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-slowMo"><i class="fa fa-step-forward"></i> SlowMo</label>
+        <input type="text" id="node-input-slowMo" style="width:70%;" placeholder="0" />
+    </div>
+    <div class="form-row">
+          <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+          <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="puppeteer-browser-launch">

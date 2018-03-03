@@ -11,6 +11,10 @@ module.exports = function (RED) {
           node.send(msg) 
         })  
     })
+    oneditprepare: function oneditprepare() {
+      $("#node-input-name").val(this.name)
+      $("#node-input-key").val(this.key)
+    }
   }
   RED.nodes.registerType('puppeteer-page-keyboard-press', PuppeteerPageKeyboardPress)
 }
