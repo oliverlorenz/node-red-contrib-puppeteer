@@ -1,6 +1,6 @@
 # node-red-contrib-puppeteer
 
-NodeRED nodes to control a headless chrome with puppeteer
+A fork from Oliver Lorenz's node-red-contrib-puppeteer repo with some extra sauce. Allows controlling headless chrome from NodeRED. For original repo head over to https://github.com/oliverlorenz/node-red-contrib-puppeteer
 
 ## Documentation
 
