@@ -2,11 +2,12 @@ module.exports = function (RED) {
   function PuppeteerPageKeyboardType (config) {
     RED.nodes.createNode(this, config)
     this.text = config.text
+    this.payload = config.payload;
+    this.payloadType = config.payloadType;
     var node = this
 
     //modifying code here
     this.on("input",function(msg) {
-      msg.topic = this.topic;
       if (this.payloadType !== 'flow' && this.payloadType !== 'global') {
           try {
               if ( (this.payloadType == null && this.payload === "") || this.payloadType === "date") {
@@ -29,12 +30,19 @@ module.exports = function (RED) {
                   node.error(err,msg);
               } else {
                   msg.payload = res;
-                  node.send(msg);
+                  msg.puppeteer.page.keyboard.type(node.text)
+                  .then(() => {
+                  node.send(msg) 
+                }) 
               }
 
           });
       }
   });
+
+  oneditprepare: function oneditprepare() {
+    $("#node-input-payload").val(this.name)
+  }
     
     // Retrieve the config node
     this.on('input', function (msg) {
@@ -43,9 +51,7 @@ module.exports = function (RED) {
           node.send(msg) 
         })  
     })
-    oneditprepare: function oneditprepare() {
-      $("#node-input-name").val(this.name)
-    }
+    
   }
   RED.nodes.registerType('puppeteer-page-keyboard-type', PuppeteerPageKeyboardType)
 }

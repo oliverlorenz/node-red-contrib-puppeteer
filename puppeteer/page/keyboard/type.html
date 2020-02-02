@@ -12,11 +12,171 @@
       label: function() {
           return this.name || "type";
       },
-      paletteLabel: "type"
+      paletteLabel: "type",
+      oneditprepare: function() {
+            if (this.payloadType == null) {
+                if (this.payload == "") {
+                    this.payloadType = "date";
+                } else {
+                    this.payloadType = "str";
+                }
+            } else if (this.payloadType === 'string' || this.payloadType === 'none') {
+                this.payloadType = "str";
+            }
+            $("#node-input-payloadType").val(this.payloadType);
+
+            $("#node-input-payload").typedInput({
+                default: 'str',
+                typeField: $("#node-input-payloadType"),
+                types:['flow','global','str','num','bool','json','bin','date','env']
+            });
+
+            $("#inject-time-type-select").on("change", function() {
+                $("#node-input-crontab").val('');
+                var id = $("#inject-time-type-select").val();
+                $(".inject-time-row").hide();
+                $("#inject-time-row-"+id).show();
+                if ((id == "none") || (id == "interval") || (id == "interval-time")) {
+                    $("#node-once").show();
+                }
+                else {
+                    $("#node-once").hide();
+                    $("#node-input-once").prop('checked', false);
+                }
+            });
+
+            $("#node-input-once").on("change", function() {
+                $("#node-input-onceDelay").attr('disabled', !$("#node-input-once").prop('checked'));
+            })
+
+            $(".inject-time-times").each(function() {
+                for (var i=0; i<24; i++) {
+                    var l = (i<10?"0":"")+i+":00";
+                    $(this).append($("<option></option>").val(i).text(l));
+                }
+            });
+            $("<option></option>").val(24).text("00:00").appendTo("#inject-time-interval-time-end");
+            $("#inject-time-interval-time-start").on("change", function() {
+                var start = Number($("#inject-time-interval-time-start").val());
+                var end = Number($("#inject-time-interval-time-end").val());
+                $("#inject-time-interval-time-end option").remove();
+                for (var i=start+1; i<25; i++) {
+                    var l = (i<10?"0":"")+i+":00";
+                    if (i==24) {
+                        l = "00:00";
+                    }
+                    var opt = $("<option></option>").val(i).text(l).appendTo("#inject-time-interval-time-end");
+                    if (i === end) {
+                        opt.attr("selected","selected");
+                    }
+                }
+            });
+
+            $(".inject-time-count").spinner({
+                //max:60,
+                min:1
+            });
+
+            var repeattype = "none";
+            if (this.repeat != "" && this.repeat != 0) {
+                repeattype = "interval";
+                var r = "s";
+                var c = this.repeat;
+                if (this.repeat % 60 === 0) { r = "m"; c = c/60; }
+                if (this.repeat % 1440 === 0) { r = "h"; c = c/60; }
+                $("#inject-time-interval-count").val(c);
+                $("#inject-time-interval-units").val(r);
+                $("#inject-time-interval-days").prop("disabled","disabled");
+            } else if (this.crontab) {
+                var cronparts = this.crontab.split(" ");
+                var days = cronparts[4];
+                if (!isNaN(cronparts[0]) && !isNaN(cronparts[1])) {
+                    repeattype = "time";
+                    // Fixed time
+                    var time = cronparts[1]+":"+cronparts[0];
+                    $("#inject-time-time").val(time);
+                    $("#inject-time-type-select").val("s");
+                    if (days == "*") {
+                        $("#inject-time-time-days input[type=checkbox]").prop("checked",true);
+                    } else {
+                        $("#inject-time-time-days input[type=checkbox]").removeAttr("checked");
+                        days.split(",").forEach(function(v) {
+                            $("#inject-time-time-days [value=" + v + "]").prop("checked", true);
+                        });
+                    }
+                } else {
+                    repeattype = "interval-time";
+                    // interval - time period
+                    var minutes = cronparts[0].slice(2);
+                    if (minutes === "") { minutes = "0"; }
+                    $("#inject-time-interval-time-units").val(minutes);
+                    if (days == "*") {
+                        $("#inject-time-interval-time-days input[type=checkbox]").prop("checked",true);
+                    } else {
+                        $("#inject-time-interval-time-days input[type=checkbox]").removeAttr("checked");
+                        days.split(",").forEach(function(v) {
+                            $("#inject-time-interval-time-days [value=" + v + "]").prop("checked", true);
+                        });
+                    }
+                    var time = cronparts[1];
+                    var timeparts = time.split(",");
+                    var start;
+                    var end;
+                    if (timeparts.length == 1) {
+                        // 0 or 0-10
+                        var hours = timeparts[0].split("-");
+                        if (hours.length == 1) {
+                            if (hours[0] === "") {
+                                start = "0";
+                                end = "0";
+                            }
+                            else {
+                                start = hours[0];
+                                end = Number(hours[0])+1;
+                            }
+                        } else {
+                            start = hours[0];
+                            end = Number(hours[1])+1;
+                        }
+                    } else {
+                        // 23,0 or 17-23,0-10 or 23,0-2 or 17-23,0
+                        var startparts = timeparts[0].split("-");
+                        start = startparts[0];
+
+                        var endparts = timeparts[1].split("-");
+                        if (endparts.length == 1) {
+                            end = Number(endparts[0])+1;
+                        } else {
+                            end = Number(endparts[1])+1;
+                        }
+                    }
+                    $("#inject-time-interval-time-end").val(end);
+                    $("#inject-time-interval-time-start").val(start);
+
+                }
+            } else {
+                $("#inject-time-type-select").val("none");
+            }
+
+            $(".inject-time-row").hide();
+            $("#inject-time-type-select").val(repeattype);
+            $("#inject-time-row-"+repeattype).show();
+
+            $("#node-input-payload").typedInput('type',this.payloadType);
+
+            $("#inject-time-type-select").trigger("change");
+            $("#inject-time-interval-time-start").trigger("change");
+
+        }
     });
 </script>
 
 <script type="text/x-red" data-template-name="puppeteer-page-keyboard-type">
+  <div class="form-row">
+    <label for="node-input-payload"><i class="fa fa-envelope"></i> <span data-i18n="common.label.payload"></span></label>
+    <input type="text" id="node-input-payload" style="width:70%">
+    <input type="hidden" id="node-input-payloadType">
+</div>
   <div class="form-row">
     <label for="node-input-text">text</label>
     <input id="node-input-text"></input>
