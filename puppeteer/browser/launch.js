@@ -11,7 +11,11 @@ module.exports = function (RED) {
 
     // Retrieve the config node
     this.on('input', function (msg) {
-      puppeteer.launch( { headless: node.headless, slowMo: node.slowMo } )
+      puppeteer.launch( { 
+        headless: node.headless, 
+        slowMo: node.slowMo,
+        args: ["--user-data-dir"]
+       } )
         .then((browser) => {
           msg.puppeteer = {
             browser
