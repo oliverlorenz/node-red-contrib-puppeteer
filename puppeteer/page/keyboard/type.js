@@ -18,7 +18,6 @@ module.exports = function (RED) {
               } else if (this.payloadType === 'none') {
                   msg.payload = "";
               } else {
-                console.log("or this");
                   msg.payload = RED.util.evaluateNodeProperty(this.payload,this.payloadType,this,msg);
               }
               this.send(msg);
@@ -27,7 +26,6 @@ module.exports = function (RED) {
               this.error(err,msg);
           }
       } else {
-        console.log("this sector");
           RED.util.evaluateNodeProperty(this.payload,this.payloadType,this,msg, function(err,res) {
               if (err) {
                   node.error(err,msg);
