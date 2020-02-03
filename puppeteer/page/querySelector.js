@@ -17,7 +17,7 @@ module.exports = function (RED) {
       })
       .then((payload) => {
         msg.payload = payload
-        node.send(msg)
+        node.send([msg, msg, msg])
       })
     })
     oneditprepare: function oneditprepare() {
