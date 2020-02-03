@@ -8,10 +8,10 @@ module.exports = function (RED) {
     this.on('input', function (msg) {
       msg.puppeteer.page.waitFor(node.selector)
         .then(() => {
-          node.send(msg) 
+          node.send([msg, null]) 
         }) 
         .catch((err) => {
-          node.error(err)
+          node.send([null, msg])
         }) 
     })
     oneditprepare: function oneditprepare() {
