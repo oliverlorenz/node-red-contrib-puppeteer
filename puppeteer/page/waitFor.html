@@ -4,7 +4,8 @@
       color: '#8BBDD9',
       defaults: {
         name: { value: '' },
-        selector:  { value: '', required: true }
+        selector: { value: '', required: true },
+        timeout: { value: 30000, required: true }
       },
       inputs:1,
       outputs:2,
@@ -19,13 +20,18 @@
 <script type="text/x-red" data-template-name="puppeteer-page-waitFor">
   <div class="form-row">
     <label for="node-input-selector">selector</label>
-    <input id="node-input-selector"></input>
+    <input type="text" id="node-input-selector"></input>
+  </div>
+  <div class="form-row">
+    <label for="node-input-timeout">timeout (ms)</label>
+    <input type="text" id="node-input-timeout"></input>
   </div>
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
       <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
   </div>
 </script>
+
 
 <script type="text/x-red" data-help-name="puppeteer-page-waitFor">
 </script>
