@@ -4,7 +4,8 @@
       color: '#8BBDD9',
       defaults: {
         name: { value: '' },
-        text:  { value: '', required: true }
+        payload: {value:"", validate: RED.validators.typedInput("payloadType")},
+        payloadType: {value:"global"}
       },
       inputs:1,
       outputs:1,
@@ -12,19 +13,51 @@
       label: function() {
           return this.name || "type";
       },
-      paletteLabel: "type"
+      paletteLabel: "type",
+      oneditprepare: function() {
+            if (this.payloadType == null) {
+                if (this.payload == "") {
+                    this.payloadType = "date";
+                } else {
+                    this.payloadType = "str";
+                }
+            } else if (this.payloadType === 'string' || this.payloadType === 'none') {
+                this.payloadType = "str";
+            }
+            $("#node-input-payloadType").val(this.payloadType);
+
+            $("#node-input-payload").typedInput({
+                default: 'str',
+                typeField: $("#node-input-payloadType"),
+                types:['flow','global','msg','str']
+            });
+
+            $("#node-input-payload").typedInput('type',this.payloadType);
+
+        }
     });
 </script>
 
 <script type="text/x-red" data-template-name="puppeteer-page-keyboard-type">
   <div class="form-row">
+    <label for="node-input-payload"><i class="fa fa-envelope"></i> <span data-i18n="common.label.payload"></span></label>
+    <input type="text" id="node-input-payload" style="width:70%">
+    <input type="hidden" id="node-input-payloadType">
+  </div>
+  <!-- <div class="form-row">
     <label for="node-input-text">text</label>
     <input id="node-input-text"></input>
-  </div>
+  </div> -->
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
       <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
   </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+</div>
+
+<div class="form-tips" data-i18n="[html]inject.tip"></div>
 </script>
 
 <script type="text/x-red" data-help-name="puppeteer-page-keyboard-type">

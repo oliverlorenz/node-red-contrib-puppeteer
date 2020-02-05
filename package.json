@@ -1,20 +1,20 @@
 {
   "name": "node-red-contrib-puppeteer",
   "version": "0.2.0",
-  "description": "NodeRED nodes to control a headless chrome with puppeteer",
+  "description": "A fork from Oliver Lorenz's node-red-contrib-puppeteer repo with some extra sauce. Allows controlling headless chrome from NodeRED. For original repo head over to https://github.com/oliverlorenz/node-red-contrib-puppeteer \n",
   "main": "index.js",
   "scripts": {},
-  "author": "Oliver Lorenz <mail@oliverlorenz.com>",
+  "author": "Shubham Mishra <shubham.root@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "puppeteer": "^1.1.1"
   },
   "bugs": {
-    "url": "https://github.com/oliverlorenz/node-red-contrib-puppeteer/issues"
+    "url": "https://github.com/mayahq/maya-red-puppeteer/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oliverlorenz/node-red-contrib-puppeteer"
+    "url": "https://github.com/mayahq/maya-red-puppeteer"
   },
   "keywords": [
     "chrome",
