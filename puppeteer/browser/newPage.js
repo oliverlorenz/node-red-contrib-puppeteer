@@ -10,10 +10,13 @@ module.exports = function(RED) {
         shape: "dot",
         text: "new page"
       });
-      msg.puppeteer.browser
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.browser
         .newPage()
         .then(page => {
-          msg.puppeteer.page = page;
+          puppeteer.page = page;
+          globalContext.set("puppeteer", puppeteer);
           node.send(msg);
           node.status({});
         })

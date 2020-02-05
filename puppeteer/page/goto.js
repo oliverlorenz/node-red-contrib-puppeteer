@@ -11,9 +11,12 @@ module.exports = function(RED) {
         shape: "dot",
         text: "going to: " + node.url.toString().substring(0, 15) + "..."
       });
-      msg.puppeteer.page
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.page
         .goto(node.url)
         .then(page => {
+          globalContext.set("puppeteer", puppeteer);
           node.send(msg);
           node.status({});
         })

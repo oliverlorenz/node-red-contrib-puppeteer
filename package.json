@@ -23,6 +23,7 @@
   ],
   "node-red": {
     "nodes": {
+      "puppeteer-browser-instance": "puppeteer/browser/browser-instance.js",
       "puppeteer-browser-launch": "puppeteer/browser/launch.js",
       "puppeteer-browser-close": "puppeteer/browser/close.js",
       "puppeteer-browser-newPage": "puppeteer/browser/newPage.js",

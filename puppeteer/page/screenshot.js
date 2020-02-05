@@ -10,8 +10,11 @@ module.exports = function(RED) {
         shape: "dot",
         text: "taking screenshot"
       });
-      msg.puppeteer.page.screenshot().then(buffer => {
-        msg.puppeteer.screenshot = buffer;
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.page.screenshot().then(buffer => {
+        puppeteer.screenshot = buffer;
+        globalContext.set("puppeteer", puppeteer);
         node.send(msg);
         node.status({});
       });

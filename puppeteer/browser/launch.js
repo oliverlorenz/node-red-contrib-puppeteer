@@ -7,6 +7,11 @@ module.exports = function(RED) {
     this.slowMo = config.slowMo;
     this.name = config.name;
     var node = this;
+    node.status({
+      fill: "red",
+      shape: "dot",
+      text: "not launched"
+    });
 
     // Retrieve the config node
     this.on("input", function(msg) {
@@ -15,6 +20,11 @@ module.exports = function(RED) {
         shape: "dot",
         text: "launching"
       });
+      var globalContext = this.context().global;
+      var checkPuppeteer = globalContext.get("puppeteer");
+      if (checkPuppeteer) {
+        checkPuppeteer.browser.close();
+      }
       puppeteer
         .launch({
           headless: node.headless,
@@ -22,13 +32,16 @@ module.exports = function(RED) {
           args: ["--user-data-dir"]
         })
         .then(browser => {
-          msg.puppeteer = {
-            browser
-          };
+          globalContext.set("puppeteer", { browser });
           node.send(msg);
-          node.status({});
+          node.status({
+            fill: "green",
+            shape: "dot",
+            text: "connected"
+          });
         })
         .catch(err => {
+          this.log(err);
           node.status({
             fill: "red",
             shape: "ring",

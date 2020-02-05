@@ -9,7 +9,9 @@ module.exports = function(RED) {
     this.on("input", function(msg) {
       const selector = "a";
       const property = "innerText";
-      msg.puppeteer.page
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.page
         .evaluate(
           ({ selector, property }) => {
             return document.querySelector(selector)[property];
@@ -20,6 +22,7 @@ module.exports = function(RED) {
           }
         )
         .then(payload => {
+          globalContext.set("puppeteer", puppeteer);
           msg.payload = payload;
           node.send([msg, msg, msg]);
         })

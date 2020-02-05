@@ -6,9 +6,12 @@ module.exports = function(RED) {
 
     // Retrieve the config node
     this.on("input", function(msg) {
-      msg.puppeteer.page.keyboard
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.page.keyboard
         .press(node.key)
         .then(() => {
+          globalContext.set("puppeteer", puppeteer);
           node.send(msg);
         })
         .catch(err => {
