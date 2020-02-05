@@ -9,6 +9,8 @@ module.exports = function(RED) {
     //modifying code here
     this.on("input", function(msg) {
       // console.log(this.payloadType, this.payload);
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
 
       if (this.payloadType === "str") {
         try {
@@ -18,7 +20,8 @@ module.exports = function(RED) {
             shape: "dot",
             text: "typing: " + this.payload.toString().substring(0, 10) + "..."
           });
-          msg.puppeteer.page.keyboard.type(this.payload).then(() => {
+          puppeteer.page.keyboard.type(this.payload).then(() => {
+            globalContext.set("puppeteer", puppeteer);
             node.send(msg);
             node.status({});
           });
@@ -42,9 +45,10 @@ module.exports = function(RED) {
                 shape: "dot",
                 text: "typing: " + res.toString().substring(0, 10) + "..."
               });
-              msg.puppeteer.page.keyboard
+              puppeteer.page.keyboard
                 .type(res)
                 .then(() => {
+                  globalContext.set("puppeteer", puppeteer);
                   node.send(msg);
                   node.status({});
                 })

@@ -10,10 +10,14 @@ module.exports = function(RED) {
         shape: "dot",
         text: "closing page"
       });
-      msg.puppeteer.page
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.page
         .close()
         .then(page => {
+          globalContext.set("puppeteer", puppeteer);
           node.send(msg);
+          node.status({});
         })
         .catch(err => {
           node.status({

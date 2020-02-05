@@ -11,9 +11,12 @@ module.exports = function(RED) {
         shape: "dot",
         text: "clicking: " + node.selector.toString().substring(0, 10) + "..."
       });
-      msg.puppeteer.page
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.page
         .click(node.selector)
         .then(() => {
+          globalContext.set("puppeteer", puppeteer);
           node.send(msg);
           node.status({});
         })

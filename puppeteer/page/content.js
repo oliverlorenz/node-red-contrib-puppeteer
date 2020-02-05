@@ -10,10 +10,14 @@ module.exports = function(RED) {
         shape: "dot",
         text: "content: " + content.toString().substring(0, 10) + "..."
       });
-      msg.puppeteer.page
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+
+      puppeteer.page
         .content()
         .then(content => {
-          msg.puppeteer.content = content;
+          puppeteer.content = content;
+          globalContext.set("puppeteer", puppeteer);
           node.send(msg);
         })
         .catch(err => {

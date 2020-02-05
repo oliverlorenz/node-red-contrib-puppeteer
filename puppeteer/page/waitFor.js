@@ -12,9 +12,12 @@ module.exports = function(RED) {
         shape: "dot",
         text: "finding: " + node.selector.toString().substring(0, 10) + "..."
       });
-      msg.puppeteer.page
+      var globalContext = this.context().global;
+      let puppeteer = globalContext.get("puppeteer");
+      puppeteer.page
         .waitFor(node.selector, { timeout: this.timeout })
         .then(() => {
+          globalContext.set("puppeteer", puppeteer);
           node.send([msg, null]);
           node.status({});
         })
