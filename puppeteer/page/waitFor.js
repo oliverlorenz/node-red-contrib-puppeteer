@@ -7,12 +7,23 @@ module.exports = function(RED) {
 
     // Retrieve the config node
     this.on("input", function(msg) {
+      node.status({
+        fill: "yellow",
+        shape: "dot",
+        text: "finding: " + node.selector.toString().substring(0, 10) + "..."
+      });
       msg.puppeteer.page
         .waitFor(node.selector, { timeout: this.timeout })
         .then(() => {
           node.send([msg, null]);
+          node.status({});
         })
         .catch(err => {
+          node.status({
+            fill: "red",
+            shape: "ring",
+            text: "error: " + err.toString().substring(0, 10) + "..."
+          });
           node.send([null, msg]);
         });
     });

@@ -1,33 +1,46 @@
-const puppeteer = require('puppeteer')
+const puppeteer = require("puppeteer");
 
-
-module.exports = function (RED) {
-  function PuppeteerBrowserLaunch (config) {
-    RED.nodes.createNode(this, config)
-    this.headless = (config.headless == "1" ? true : false)
-    this.slowMo = config.slowMo
-    this.name = config.name
-    var node = this
+module.exports = function(RED) {
+  function PuppeteerBrowserLaunch(config) {
+    RED.nodes.createNode(this, config);
+    this.headless = config.headless == "1" ? true : false;
+    this.slowMo = config.slowMo;
+    this.name = config.name;
+    var node = this;
 
     // Retrieve the config node
-    this.on('input', function (msg) {
-      puppeteer.launch( { 
-        headless: node.headless, 
-        slowMo: node.slowMo,
-        args: ["--user-data-dir"]
-       } )
-        .then((browser) => {
+    this.on("input", function(msg) {
+      node.status({
+        fill: "yellow",
+        shape: "dot",
+        text: "launching"
+      });
+      puppeteer
+        .launch({
+          headless: node.headless,
+          slowMo: node.slowMo,
+          args: ["--user-data-dir"]
+        })
+        .then(browser => {
           msg.puppeteer = {
             browser
-          }
-          node.send(msg)
+          };
+          node.send(msg);
+          node.status({});
         })
-    })
+        .catch(err => {
+          node.status({
+            fill: "red",
+            shape: "ring",
+            text: "error: " + err.toString().substring(0, 10) + "..."
+          });
+        });
+    });
     oneditprepare: function oneditprepare() {
-      $("#node-input-headless").val(this.headless === true ? "1" : "0")
-      $("#node-input-slowMo").val(this.slowMo)
-      $("#node-input-name").val(this.name)
+      $("#node-input-headless").val(this.headless === true ? "1" : "0");
+      $("#node-input-slowMo").val(this.slowMo);
+      $("#node-input-name").val(this.name);
     }
   }
-  RED.nodes.registerType('puppeteer-browser-launch', PuppeteerBrowserLaunch)
-}
+  RED.nodes.registerType("puppeteer-browser-launch", PuppeteerBrowserLaunch);
+};
