@@ -1,5 +1,5 @@
 {
-  "name": "node-red-contrib-puppeteer",
+  "name": "maya-red-puppeteer",
   "version": "0.2.0",
   "description": "A fork from Oliver Lorenz's node-red-contrib-puppeteer repo with some extra sauce. Allows controlling headless chrome from NodeRED. For original repo head over to https://github.com/oliverlorenz/node-red-contrib-puppeteer \n",
   "main": "index.js",
