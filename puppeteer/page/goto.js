@@ -9,12 +9,12 @@ module.exports = function(RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "going to: " + node.url.toString().substring(0, 15) + "..."
+        text: "going to: " + (node.url !== "")||(node.url !== undefined) ? node.url.toString().substring(0, 15): msg.url.toString().substring(0, 15) + "..."
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
       puppeteer.page
-        .goto(node.url)
+        .goto((node.url !== "")||(node.url !== undefined) ? node.url: msg.url)
         .then(page => {
           globalContext.set("puppeteer", puppeteer);
           node.send(msg);
