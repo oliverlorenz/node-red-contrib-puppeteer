@@ -8,6 +8,7 @@ module.exports = function(RED) {
 
     //modifying code here
     this.on("input", function(msg) {
+      var data = msg.data;
       // console.log(this.payloadType, this.payload);
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");

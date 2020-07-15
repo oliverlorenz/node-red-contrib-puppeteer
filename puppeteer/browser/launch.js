@@ -29,7 +29,7 @@ module.exports = function(RED) {
         .launch({
           headless: node.headless,
           slowMo: node.slowMo,
-          args: ["--user-data-dir"]
+          args: ["--user-data-dir", "--use-fake-ui-for-media-stream"]
         })
         .then(browser => {
           globalContext.set("puppeteer", { browser });

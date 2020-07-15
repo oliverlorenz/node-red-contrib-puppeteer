@@ -7,6 +7,7 @@ module.exports = function(RED) {
 
     // Retrieve the config node
     this.on("input", function(msg) {
+      var data = msg.data;
       node.status({
         fill: "yellow",
         shape: "dot",

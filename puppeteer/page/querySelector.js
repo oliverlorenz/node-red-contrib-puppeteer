@@ -7,6 +7,7 @@ module.exports = function(RED) {
 
     // Retrieve the config node
     this.on("input", function(msg) {
+      var data = msg.data;
       const selector = "a";
       const property = "innerText";
       var globalContext = this.context().global;
