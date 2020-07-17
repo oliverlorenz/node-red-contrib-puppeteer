@@ -31,6 +31,7 @@ module.exports = function (RED) {
           headless: node.headless,
           slowMo: node.slowMo,
           args: ["--user-data-dir", "--use-fake-ui-for-media-stream"],
+          ignoreDefaultArgs: ["--enable-automation"],
         })
         .then((browser) => {
           globalContext.set("puppeteer", { browser });
