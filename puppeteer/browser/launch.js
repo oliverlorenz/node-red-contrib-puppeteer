@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 
-module.exports = function(RED) {
+module.exports = function (RED) {
   function PuppeteerBrowserLaunch(config) {
     RED.nodes.createNode(this, config);
     this.headless = config.headless == "1" ? true : false;
@@ -10,15 +10,15 @@ module.exports = function(RED) {
     node.status({
       fill: "red",
       shape: "dot",
-      text: "not launched"
+      text: "not launched",
     });
 
     // Retrieve the config node
-    this.on("input", function(msg) {
+    this.on("input", function (msg) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "launching"
+        text: "launching",
       });
       var globalContext = this.context().global;
       var checkPuppeteer = globalContext.get("puppeteer");
@@ -27,25 +27,26 @@ module.exports = function(RED) {
       }
       puppeteer
         .launch({
+          defaultViewport: null,
           headless: node.headless,
           slowMo: node.slowMo,
-          args: ["--user-data-dir", "--use-fake-ui-for-media-stream"]
+          args: ["--user-data-dir", "--use-fake-ui-for-media-stream"],
         })
-        .then(browser => {
+        .then((browser) => {
           globalContext.set("puppeteer", { browser });
           node.send(msg);
           node.status({
             fill: "green",
             shape: "dot",
-            text: "connected"
+            text: "connected",
           });
         })
-        .catch(err => {
+        .catch((err) => {
           this.log(err);
           node.status({
             fill: "red",
             shape: "ring",
-            text: "error: " + err.toString().substring(0, 10) + "..."
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
         });
     });
