@@ -36,7 +36,8 @@
       "puppeteer-page-keyboard-type": "puppeteer/page/keyboard/type.js",
       "puppeteer-page-keyboard-press": "puppeteer/page/keyboard/press.js",
       "puppeteer-page-querySelector": "puppeteer/page/querySelector.js",
-      "puppeteer-page-select-inject": "puppeteer/page/injectValue.js"
+      "puppeteer-page-select-inject": "puppeteer/page/injectValue.js",
+      "puppeteer-page-wait-for-and-click": "puppeteer/page/waitFor-click.js"
     }
   }
 }

@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-    function PuppeteerDocumentQuerySelector(config) {
+    function PuppeteerDocumentSelectorInjector(config) {
 
         RED.nodes.createNode(this, config);
         this.selector = config.selector;
@@ -16,7 +16,7 @@ module.exports = function (RED) {
             var globalContext = this.context().global;
             let puppeteer = globalContext.get("puppeteer");
 
-            if (this.payloadType === "str") {
+            if (this.payloadTypeSelector === "str" && this.payloadTypeInjectValue === "str") {
                 // msg.payload = res;
                 node.status({
                     fill: "yellow",
@@ -107,6 +107,6 @@ module.exports = function (RED) {
     }
     RED.nodes.registerType(
         "puppeteer-page-select-inject",
-        PuppeteerDocumentQuerySelector
+        PuppeteerDocumentSelectorInjector
     );
 };
