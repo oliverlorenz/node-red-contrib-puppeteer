@@ -10,7 +10,7 @@ module.exports = function (RED) {
 
         // Retrieve the config node
 
-        this.on("input", function (msg) {
+        this.on("input", async function (msg) {
             var data = msg.data;
             // console.log(this.payloadType, this.payload);
             var globalContext = this.context().global;
@@ -23,10 +23,10 @@ module.exports = function (RED) {
                     shape: "dot",
                     text: "typing: " + this.injectValue.toString().substring(0, 10) + "..."
                 });
-                puppeteer.page
+                await puppeteer.page
                     .evaluate(
-                        ({ selector, injectValue }) => {
-                            document.querySelector(selector).value = injectValue;
+                        async ({ selector, injectValue }) => {
+                            document.querySelector(selector).value = await injectValue;
                         },
                         {
                             selector: this.selector,
@@ -54,7 +54,11 @@ module.exports = function (RED) {
                     msg,
                     function (err, res) {
                         if (err) {
+                            if(this.payloadTypeSelector === "str"){
+                                selector = this.selector;
+                            } else {
                             node.error(err.msg);
+                            }
                         } else {
                             selector = res;
                         }
@@ -67,7 +71,11 @@ module.exports = function (RED) {
                     msg,
                     function (err, res) {
                         if (err) {
+                            if(this.payloadTypeInjectValue === "str"){
+                                injectValue = this.injectValue;
+                            } else {
                             node.error(err.msg);
+                            }
                         } else {
                             injectValue = res;
                         }
@@ -75,10 +83,10 @@ module.exports = function (RED) {
                 );
 
                 console.log(selector, injectValue);
-                puppeteer.page
+                await puppeteer.page
                     .evaluate(
-                        ({ selector, injectValue }) => {
-                            document.querySelector(selector).value = injectValue;
+                        async ({ selector, injectValue }) => {
+                            document.querySelector(selector).value = await injectValue;
                         },
                         {
                             selector: selector,

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('puppeteer-page-click', {
+    RED.nodes.registerType('puppeteer-page-clear', {
       category: 'puppeteerpage',
       color: '#8BBDD9',
       defaults: {
@@ -11,9 +11,9 @@
       outputs:1,
       icon: "fa-file-code-o.png",
       label: function() {
-          return this.name || "click";
+          return this.name || "clear";
       },
-      paletteLabel: "click",
+      paletteLabel: "clear",
       oneditprepare: function() {
           //selector logic
             if (this.payloadTypeSelector === null) {
@@ -37,7 +37,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="puppeteer-page-click">
+<script type="text/x-red" data-template-name="puppeteer-page-clear">
   <div class="form-row">
     <label for="node-input-selector">selector</label>
     <input type="text" id="node-input-selector"></input>
@@ -49,5 +49,5 @@
   </div>
 </script>
 
-<script type="text/x-red" data-help-name="puppeteer-page-click">
+<script type="text/x-red" data-help-name="puppeteer-page-clear">
 </script>

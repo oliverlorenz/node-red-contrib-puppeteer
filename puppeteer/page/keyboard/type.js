@@ -40,7 +40,6 @@ module.exports = function(RED) {
             if (err) {
               node.error(err, msg);
             } else {
-              console.log("Success:", err, res);
               // msg.payload = res;
               node.status({
                 fill: "yellow",

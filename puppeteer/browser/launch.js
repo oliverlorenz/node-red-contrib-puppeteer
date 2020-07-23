@@ -27,6 +27,7 @@ module.exports = function(RED) {
       }
       puppeteer
         .launch({
+          defaultViewport: null,
           headless: node.headless,
           slowMo: node.slowMo,
           args: ["--user-data-dir", "--use-fake-ui-for-media-stream"]
