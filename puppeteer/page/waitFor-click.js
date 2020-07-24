@@ -29,9 +29,14 @@ module.exports = function (RED) {
             node.send([null, msg]);
           });
         puppeteer.page
-          .click(typeof this.timeout === "number" ? this.timeout:this.selector)
+          .click(this.selector)
           .then(() => {
             globalContext.set("puppeteer", puppeteer);
+            node.status({
+              fill: "green",
+              shape: "dot",
+              text: "completed"
+            });
             node.send([msg, null]);
           })
           .catch(err => {
@@ -71,8 +76,12 @@ module.exports = function (RED) {
           .click(selector)
           .then(() => {
             globalContext.set("puppeteer", puppeteer);
+            node.status({
+              fill: "green",
+              shape: "dot",
+              text: "completed"
+            });
             node.send([msg, null]);
-            node.status({});
           })
           .catch(err => {
             node.error(err);
