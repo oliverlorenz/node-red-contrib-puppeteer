@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 
 module.exports = function (RED) {
   function PuppeteerBrowserLaunch(config) {
@@ -34,6 +34,7 @@ module.exports = function (RED) {
       } else {
         puppeteer
           .launch({
+            executablePath: require("os").homedir()+"/.maya/792177/chrome-linux/chrome",
             defaultViewport: null,
             headless: node.headless,
             slowMo: node.slowMo,
