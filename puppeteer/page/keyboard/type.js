@@ -4,6 +4,7 @@ module.exports = function(RED) {
     // this.text = config.text
     this.payload = config.payload;
     this.payloadType = config.payloadType;
+    this.timeout = config.timeout;
     var node = this;
 
     //modifying code here
