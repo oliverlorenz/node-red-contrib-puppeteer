@@ -19,7 +19,7 @@ module.exports = function (RED) {
 
       if (this.payloadTypeSelector === "str") {
         await puppeteer.page
-          .waitFor(this.selector, { timeout: this.timeout })
+          .waitFor(typeof this.timeout === "number" ? this.timeout:this.selector)
           .catch(err => {
             node.status({
               fill: "red",
@@ -32,8 +32,12 @@ module.exports = function (RED) {
           .click(this.selector)
           .then(() => {
             globalContext.set("puppeteer", puppeteer);
-            node.send(msg);
-            node.status({});
+            node.status({
+              fill: "green",
+              shape: "dot",
+              text: "completed"
+            });
+            node.send([msg, null]);
           })
           .catch(err => {
             node.error(err);
@@ -59,7 +63,7 @@ module.exports = function (RED) {
           }
         );
         await puppeteer.page
-          .waitFor(selector, { timeout: this.timeout })
+          .waitFor(typeof this.timeout === "number"?this.timeout:selector) 
           .catch(err => {
             node.status({
               fill: "red",
@@ -72,8 +76,12 @@ module.exports = function (RED) {
           .click(selector)
           .then(() => {
             globalContext.set("puppeteer", puppeteer);
-            node.send(msg);
-            node.status({});
+            node.status({
+              fill: "green",
+              shape: "dot",
+              text: "completed"
+            });
+            node.send([msg, null]);
           })
           .catch(err => {
             node.error(err);

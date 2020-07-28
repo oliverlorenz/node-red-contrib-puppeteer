@@ -1,0 +1,84 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-page-find-link', {
+      category: 'puppeteerpage',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: '' },
+        wait: { value: 3000 },
+        selector:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector")},
+        find:  {value:"", validate: RED.validators.typedInput("payloadTypeFind")},
+        payloadTypeFind: {value:"global"},
+        payloadTypeSelector: {value:"global"},
+      },
+      inputs:1,
+      outputs:1,
+      icon: "fa-file-code-o.png",
+      label: function() {
+          return this.name || "find & click";
+      },
+      paletteLabel: "find & click",
+      oneditprepare: function() {
+        if (this.payloadTypeFind === null) {
+            if (this.find === "") {
+                this.payloadTypeFind = "date";
+            } else {
+                this.payloadTypeFind = "str";
+            }
+        } else if (this.payloadTypeFind === 'string' || this.payloadTypeFind === 'none') {
+            this.payloadTypeFind = "str";
+        }
+
+        $("#node-input-payloadTypeFind").val(this.payloadTypeFind);
+        $("#node-input-find").typedInput({
+            default: 'str',
+            typeField: $("#node-input-payloadTypeFind"),
+            types:['flow','global','msg','str']
+        });
+
+        $("#node-input-find").typedInput('type',this.payloadTypeFind);
+
+        if (this.payloadTypeSelector === null) {
+            if (this.selector === "") {
+                this.payloadTypeSelector = "date";
+            } else {
+                this.payloadTypeSelector = "str";
+            }
+        } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+            this.payloadTypeSelector = "str";
+        }
+
+        $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
+            $("#node-input-selector").typedInput({
+                default: 'str',
+                typeField: $("#node-input-payloadTypeSelector"),
+                types:['flow','global','msg','str']
+            });
+
+            $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
+      }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-page-find-link">
+<div class="form-row">
+      <label for="node-input-selector"><i class="fa fa-envelope"></i><span data-i18n="common.label.payload"></span>  selector</label>
+      <input type="text" id="node-input-selector" style="width:70%" placeholder="selector">
+      <input type="hidden" id="node-input-payloadTypeSelector">
+  </div>
+  <div class="form-row">
+      <label for="node-input-find"><i class="fa fa-envelope"></i><span data-i18n="common.label.payload"></span>  find</label>
+      <input type="text" id="node-input-find" style="width:70%" placeholder="find">
+      <input type="hidden" id="node-input-payloadTypeFind">
+  </div>
+  <div class="form-row">
+      <label for="node-input-wait"><i class="fa fa-tag"></i> wait (ms)</label>
+      <input type="text" id="node-input-wait" style="width:70%;" placeholder="wait time before try in ms" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-page-find-link">
+</script>

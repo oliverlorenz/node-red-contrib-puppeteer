@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-  function PuppeteerPageClick(config) {
+  function PuppeteerPageClear(config) {
     RED.nodes.createNode(this, config);
     this.selector = config.selector;
     this.payloadTypeSelector = config.payloadTypeSelector;
@@ -11,14 +11,16 @@ module.exports = function (RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "clicking: " + node.selector.toString().substring(0, 10) + "..."
+        text: "clicking: " + this.selector.toString().substring(0, 10) + "..."
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
       if (this.payloadTypeSelector === "str") {
         puppeteer.page
-          .click(node.selector)
-          .then(() => {
+          .evaluate(selector => {
+            document.querySelector(selector).value = ""
+          }, this.selector
+          ).then(() => {
             globalContext.set("puppeteer", puppeteer);
             node.send(msg);
             node.status({});
@@ -46,9 +48,12 @@ module.exports = function (RED) {
             }
           }
         );
+        console.log("Clearing :", selector);
         puppeteer.page
-          .click(selector)
-          .then(() => {
+          .evaluate(selector => {
+            document.querySelector(selector).value = ""
+          }, selector
+          ).then(() => {
             globalContext.set("puppeteer", puppeteer);
             node.send(msg);
             node.status({});
@@ -67,5 +72,5 @@ module.exports = function (RED) {
       $("#node-input-name").val(this.name);
     }
   }
-  RED.nodes.registerType("puppeteer-page-click", PuppeteerPageClick);
+  RED.nodes.registerType("puppeteer-page-clear", PuppeteerPageClear);
 };
