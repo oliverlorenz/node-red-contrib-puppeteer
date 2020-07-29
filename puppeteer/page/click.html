@@ -16,23 +16,23 @@
       paletteLabel: "click",
       oneditprepare: function() {
           //selector logic
-            if (this.payloadTypeSelector === null) {
-                if (this.selector === "") {
-                    this.payloadTypeSelector = "date";
-                } else {
-                    this.payloadTypeSelector = "str";
-                }
-            } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+        if (this.payloadTypeSelector === null) {
+            if (this.selector === "") {
+                this.payloadTypeSelector = "date";
+            } else {
                 this.payloadTypeSelector = "str";
             }
-            $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
-            $("#node-input-selector").typedInput({
-                default: 'str',
-                typeField: $("#node-input-payloadTypeSelector"),
-                types:['flow','global','msg','str']
-            });
+        } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+            this.payloadTypeSelector = "str";
+        }
+        $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
+        $("#node-input-selector").typedInput({
+            default: 'str',
+            typeField: $("#node-input-payloadTypeSelector"),
+            types:['flow','global','msg','str']
+        });
 
-            $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
+        $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
       }
     });
 </script>
@@ -50,4 +50,6 @@
 </script>
 
 <script type="text/x-red" data-help-name="puppeteer-page-click">
+    <p><code>click</code> node is emulate a mouse click on a DOM element identified by a <code>selector</code></p>
+    <p><code>selector</code> can be provided as a static string or dynamic value passed as one of the <code>msg</code>, <code>flow</code> or <code>global</code> object key</p>
 </script>

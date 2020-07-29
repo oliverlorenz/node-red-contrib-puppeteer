@@ -4,7 +4,8 @@
       color: '#8BBDD9',
       defaults: {
         name: { value: '' },
-        selector: { value: '', required: true },
+        selector:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector")},
+        payloadTypeSelector: {value:"str"},
         timeout: { value: 30000, required: true }
       },
       inputs:1,
@@ -13,7 +14,27 @@
       label: function() {
           return this.name || "waitFor";
       },
-      paletteLabel: "waitFor"
+      paletteLabel: "waitFor",
+      oneditprepare: function() {
+        if (this.payloadTypeSelector === null) {
+            if (this.selector === "") {
+                this.payloadTypeSelector = "date";
+            } else {
+                this.payloadTypeSelector = "str";
+            }
+        } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+            this.payloadTypeSelector = "str";
+        }
+
+        $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
+            $("#node-input-selector").typedInput({
+                default: 'str',
+                typeField: $("#node-input-payloadTypeSelector"),
+                types:['flow','global','msg','str', "num"]
+            });
+
+            $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
+      }
     });
 </script>
 
@@ -21,6 +42,7 @@
   <div class="form-row">
     <label for="node-input-selector">selector</label>
     <input type="text" id="node-input-selector"></input>
+    <input type="hidden" id="node-input-payloadTypeSelector">
   </div>
   <div class="form-row">
     <label for="node-input-timeout">timeout (ms)</label>
@@ -34,4 +56,7 @@
 
 
 <script type="text/x-red" data-help-name="puppeteer-page-waitFor">
+  <p>The <code>waitFor</code> node is to put a delay till a certain DOM element identified by a <code>selector</code> is loaded on the page.</p>
+  <p>A timeout in milliseconds is required to set an upper cap on wait for the desired <code>selector</code> to be loaded on DOM.</p> 
+  <p>If user just want to include a wait for some finite amount of time then <code>num</code> type selector can be chosen to input a numeric value in milliseconds.</p>
 </script>

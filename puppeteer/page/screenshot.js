@@ -14,6 +14,7 @@ module.exports = function(RED) {
       let puppeteer = globalContext.get("puppeteer");
       puppeteer.page.screenshot().then(buffer => {
         puppeteer.screenshot = buffer;
+        msg.screenshot = buffer;
         globalContext.set("puppeteer", puppeteer);
         node.send(msg);
         node.status({});

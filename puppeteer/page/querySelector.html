@@ -4,8 +4,10 @@
       color: '#8BBDD9',
       defaults: {
         name: { value: '' },
-        selector:  { value: '', required: true },
-        property:  { value: 'innerText', required: true }
+        selector:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector"), required:true},
+        payloadTypeSelector: {value: 'global'},
+        property:  {value:"innerText", validate: RED.validators.typedInput("payloadTypeProperty"), required:true},
+        payloadTypeProperty: {value: "str"},
       },
       inputs:1,
       outputs:3,
@@ -13,7 +15,36 @@
       label: function() {
           return this.name || "querySelector";
       },
-      paletteLabel: "querySelector"
+      paletteLabel: "querySelector",
+      oneditprepare: function() {
+        if (this.payloadTypeSelector === null) {
+            if (this.selector === "") {
+                this.payloadTypeSelector = "date";
+            } else {
+                this.payloadTypeSelector = "str";
+            }
+        } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+            this.payloadTypeSelector = "str";
+        }
+        $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
+        $("#node-input-selector").typedInput({
+            default: 'str',
+            typeField: $("#node-input-payloadTypeSelector"),
+            types:['flow','global','msg','str']
+        });
+
+        $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
+
+        if (this.payloadTypeProperty === null) {
+          if (this.property === "") {
+              this.payloadTypeProperty = "date";
+          } else {
+              this.payloadTypeProperty = "str";
+          }
+      } else if (this.payloadTypeProperty === 'string' || this.payloadTypeProperty === 'none') {
+          this.payloadTypeProperty = "str";
+      }
+      }
     });
 </script>
 
@@ -21,10 +52,12 @@
   <div class="form-row">
       <label for="node-input-selector">selector</label>
       <input type="text" id="node-input-selector"></input>
+      <input type="hidden" id="node-input-payloadTypeSelector">
   </div>
   <div class="form-row">
       <label for="node-input-property">property</label>
       <input type="text" id="node-input-property"></input>
+      <input type="hidden" id="node-input-payloadTypeProperty">
   </div>
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -33,4 +66,5 @@
 </script>
 
 <script type="text/x-red" data-help-name="puppeteer-page-document-querySelector">
+
 </script>
