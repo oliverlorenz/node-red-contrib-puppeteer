@@ -34,7 +34,6 @@ module.exports = function (RED) {
       } else {
         puppeteer
           .launch({
-            executablePath: require("os").homedir()+"/.maya/792177/chrome-linux/chrome",
             defaultViewport: null,
             headless: node.headless,
             slowMo: node.slowMo,

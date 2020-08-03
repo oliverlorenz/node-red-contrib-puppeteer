@@ -61,12 +61,12 @@
 
 <script type="text/x-red" data-template-name="puppeteer-page-find-link">
 <div class="form-row">
-      <label for="node-input-selector"><i class="fa fa-envelope"></i><span data-i18n="common.label.payload"></span>  selector</label>
+      <label for="node-input-selector"><i class="fa fa-envelope"></i><span data-i18n="common.label.payload"></span>  tag</label>
       <input type="text" id="node-input-selector" style="width:70%" placeholder="selector">
       <input type="hidden" id="node-input-payloadTypeSelector">
   </div>
   <div class="form-row">
-      <label for="node-input-find"><i class="fa fa-envelope"></i><span data-i18n="common.label.payload"></span>  find</label>
+      <label for="node-input-find"><i class="fa fa-envelope"></i><span data-i18n="common.label.payload"></span>  search</label>
       <input type="text" id="node-input-find" style="width:70%" placeholder="find">
       <input type="hidden" id="node-input-payloadTypeFind">
   </div>
@@ -81,4 +81,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="puppeteer-page-find-link">
+    <code>find & click</code> node of maya browser automation is used to search a <code>string</code> on the current page.</p>
+    <p>To use this code an HTML <code>tag</code> has to be provided to search from along with the text string to be searched to be found.
+    The node searches for all tags of the provided type for the string and emulates a <code>click</code> event on the obtained <code>selector</code>.</p>
 </script>

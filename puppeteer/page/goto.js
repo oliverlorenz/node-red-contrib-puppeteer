@@ -2,6 +2,7 @@ module.exports = function(RED) {
   function PuppeteerPageGoto(config) {
     RED.nodes.createNode(this, config);
     this.url = config.url;
+    this.payloadTypeUrl = config.payloadTypeUrl;
     var node = this;
 
     // Retrieve the config node
@@ -13,21 +14,61 @@ module.exports = function(RED) {
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      puppeteer.page
-        .goto(node.url !== "" ? node.url: msg.url)
-        .then(page => {
-          globalContext.set("puppeteer", puppeteer);
-          node.send(msg);
-          node.status({});
-        })
-        .catch(err => {
-          node.status({
-            fill: "red",
-            shape: "ring",
-            text: "error: " + err.toString().substring(0, 10) + "..."
+      if (this.payloadTypeUrl === "str") {
+        puppeteer.page
+          .goto(node.url)
+          .then(() => {
+            globalContext.set("puppeteer", puppeteer);
+            node.send(msg);
+            node.status({
+              fill: "green",
+              shape: "dot",
+              text: "completed"
+            });
+          })
+          .catch(err => {
+            node.error(err);
+            node.status({
+              fill: "red",
+              shape: "ring",
+              text: "error: " + err.toString().substring(0, 10) + "..."
+            });
           });
-          node.error(err);
-        });
+      } else {
+        var url;
+        RED.util.evaluateNodeProperty(
+          this.url,
+          this.payloadTypeUrl,
+          this,
+          msg,
+          function (err, res) {
+            if (err) {
+              node.error(err.msg);
+            } else {
+              url = res;
+            }
+          }
+        );
+        puppeteer.page
+          .goto(url)
+          .then(() => {
+            globalContext.set("puppeteer", puppeteer);
+            node.send(msg);
+            node.status({
+              fill: "green",
+              shape: "dot",
+              text: "completed"
+            });
+          })
+          .catch(err => {
+            node.error(err);
+            node.status({
+              fill: "red",
+              shape: "ring",
+              text: "error: " + err.toString().substring(0, 10) + "..."
+            });
+          });
+      }
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);

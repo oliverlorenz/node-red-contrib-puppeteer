@@ -37,6 +37,7 @@ module.exports = function (RED) {
                         globalContext.set("puppeteer", puppeteer);
                         msg.payload = payload;
                         node.send([msg, msg, msg]);
+                        node.status({})
                     })
                     .catch(err => {
                         node.status({
