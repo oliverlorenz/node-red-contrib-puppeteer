@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 
 module.exports = function(RED) {
   function PuppeteerBrowserClose(config) {
