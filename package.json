@@ -7,7 +7,7 @@
   "author": "Shubham Mishra <shubham.root@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "puppeteer-core": "^5.2.1"
+    "puppeteer": "^5.2.1"
   },
   "bugs": {
     "url": "https://github.com/mayahq/maya-red-puppeteer/issues"
@@ -39,7 +39,7 @@
       "puppeteer-page-querySelector": "puppeteer/page/querySelector.js",
       "puppeteer-page-select-inject": "puppeteer/page/injectValue.js",
       "puppeteer-page-wait-for-and-click": "puppeteer/page/waitFor-click.js",
-      "puppeteer-page-find-and-click":"puppeteer/page/findLink.js"
+      "puppeteer-page-find-and-click": "puppeteer/page/findLink.js"
     }
   }
 }
