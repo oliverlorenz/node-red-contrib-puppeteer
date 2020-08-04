@@ -1,0 +1,43 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-browser-launch', {
+      category: 'puppeteerbrowser',
+      color: '#8BBDD9',
+      defaults: {
+        name: { value: ''},
+        headless: { value: true, require: true },
+        slowMo: { value: undefined },
+      },
+      inputs:1,
+      outputs:1,
+      icon: "fa-chrome.png",
+      label: function() {
+          return this.name || "launch";
+      },
+      paletteLabel: "launch"
+    });
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-browser-launch">
+    <div class="form-row">
+        <label for="node-input-headless"><i class="fa fa-cogs"></i> Run Headless</label>
+        <select type="boolean" id="node-input-headless" style="width:70%;">
+            <option value="1">yes</option>
+            <option value="0">no</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-slowMo"><i class="fa fa-step-forward"></i> SlowMo</label>
+        <input type="text" id="node-input-slowMo" style="width:70%;" placeholder="0" />
+    </div>
+    <div class="form-row">
+          <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+          <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-browser-launch">
+    <p>Launch browser node for Maya browser automation based in Chromium</p>
+    <p>Both headless and headful mode are supported and can be chosen from the drop down of Launch node configuration.</p>
+    <p>Select <code>no</code> to <em>headless</em> option for running the simulation in headfull mode.
+    <p>Usual speed of emulation is dependent on network badnwidth and CPU capacity, however user can modify the emulation speed by setting the property <em>slowMo</em> to a desired delay time in milliseconds to emulate human like speed.</p>
+</script>
