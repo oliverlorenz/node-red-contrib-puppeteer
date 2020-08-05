@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('maya-extension-open', {
+    RED.nodes.registerType('maya-browser-open', {
       category: 'maya-extension',
       color: '#8BBDD9', 
       defaults: {
@@ -36,7 +36,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="maya-extension-open">
+<script type="text/x-red" data-template-name="maya-browser-open">
   <div class="form-row">
     <label for="node-input-url">url</label>
     <input type="text" id="node-input-url"></input>
@@ -48,7 +48,7 @@
   </div>
 </script>
 
-<script type="text/x-red" data-help-name="maya-extension-open">
+<script type="text/x-red" data-help-name="maya-browser-open">
   <p> The <code>open</code> node executes the action of navigating to a website/webpage provided with a valid DNS.</p>
   <p> The node configuration expects a <code>url</code> as a string or a variabled passed through <code>msg</code>, <code>flow</code> or <code>global</code> special variables.</p>
 </script>
