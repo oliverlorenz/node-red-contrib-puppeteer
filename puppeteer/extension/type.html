@@ -9,6 +9,7 @@
         content:  {value:"", validate: RED.validators.typedInput("payloadTypeContent")},
         payloadTypeContent: {value:"global"},
         timeout: {value: 3000},
+        selectorType: {value: "querySelector"},
       },
       inputs:1,
       outputs:1,
@@ -59,6 +60,12 @@
 </script>
 
 <script type="text/x-red" data-template-name="maya-browser-type">
+  <div class="form-row">
+    <label for="node-input-selectorType"><span> selector type </span></label>
+    <select id="node-input-selectorType" type="text">
+        <option value="querySelector" selected>querySelector</option>
+    </select>
+  </div>
   <div class="form-row">
     <label for="node-input-selector"><span> selector</span></label>
     <input type="text" id="node-input-selector"></input>

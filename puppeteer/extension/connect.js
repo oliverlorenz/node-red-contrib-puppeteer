@@ -26,11 +26,14 @@ class BrowserPage {
         });
     });
   }
-  async click(selector, timeout) {
+  async click(selectorType, selector, timeout) {
     return new Promise((resolve, reject) => {
       APIFetch(this.serverUrl + "/api", "post", {
         type: "click",
-        payload: { selector: selector },
+        payload: {
+          selector: selector,
+          selectorType: selectorType || "querySelector",
+        },
         timeout: timeout || 1000,
       })
         .then((result) => {
@@ -42,11 +45,15 @@ class BrowserPage {
         });
     });
   }
-  async type(selector, text, timeout) {
+  async type(selectorType, selector, text, timeout) {
     return new Promise((resolve, reject) => {
       APIFetch(this.serverUrl + "/api", "post", {
         type: "type",
-        payload: { selector: selector, text: text },
+        payload: {
+          selector: selector,
+          selectorType: selectorType || "querySelector",
+          text: text,
+        },
         timeout: timeout || 1000,
       })
         .then((result) => {
@@ -58,15 +65,20 @@ class BrowserPage {
         });
     });
   }
-  async clear(selector, text, timeout) {
+  async prompt(selectorType, selector, prompt, event, timeout) {
     return new Promise((resolve, reject) => {
       APIFetch(this.serverUrl + "/api", "post", {
-        type: "type",
-        payload: { selector: selector, text: "" },
+        type: "prompt",
+        payload: {
+          selector: selector,
+          selectorType: selectorType || "querySelector",
+          prompt,
+          event,
+        },
         timeout: timeout || 1000,
       })
         .then((result) => {
-          console.log("Clear:", result.data);
+          console.log("Prompt:", result.data);
           resolve(result);
         })
         .catch(({ response }) => {
@@ -116,63 +128,63 @@ class MayaClient {
 let maya = new MayaClient()
 
 module.exports = function (RED) {
-	function MayaBrowserConnect(config) {
-		RED.nodes.createNode(this, config);
+  function MayaBrowserConnect(config) {
+    RED.nodes.createNode(this, config);
     this.name = config.name;
     this.timeout = config.timeout;
-		var node = this;
-		node.status({
-			fill: "red",
-			shape: "dot",
-			text: "not launched",
-		});
+    var node = this;
+    node.status({
+      fill: "red",
+      shape: "dot",
+      text: "not launched",
+    });
 
-		// Retrieve the config node
-		this.on("input", function (msg) {
-			node.status({
-				fill: "yellow",
-				shape: "dot",
-				text: "launching",
-			});
-			var globalContext = this.context().global;
-			var checkMaya = globalContext.get("maya");
-			if (checkMaya) {
-				// checkPuppeteer.browser.close();
-				globalContext.set("maya", { browser: checkMaya.browser });
-				node.send(msg);
-				node.status({
-					fill: "green",
-					shape: "dot",
-					text: "connected",
-				});
-			} else {
-				maya
-					.launch(controlServer, this.timeout)
-					.then(async (browser) => {
+    // Retrieve the config node
+    this.on("input", function (msg) {
+      node.status({
+        fill: "yellow",
+        shape: "dot",
+        text: "launching",
+      });
+      var globalContext = this.context().global;
+      var checkMaya = globalContext.get("maya");
+      if (checkMaya) {
+        // checkPuppeteer.browser.close();
+        globalContext.set("maya", { browser: checkMaya.browser });
+        node.send(msg);
+        node.status({
+          fill: "green",
+          shape: "dot",
+          text: "connected",
+        });
+      } else {
+        maya
+          .launch(controlServer, this.timeout)
+          .then(async (browser) => {
             browser.page = await browser.newPage();
-						await globalContext.set("maya", {browser});
-						node.send(msg);
-						node.status({
-							fill: "green",
-							shape: "dot",
-							text: "connected",
-						});
-					})
-					.catch((err) => {
-						this.log(err);
-						node.status({
-							fill: "red",
-							shape: "ring",
-							text: "error: " + err.toString().substring(0, 10) + "...",
-						});
-					});
-			}
-		});
-		oneditprepare: function oneditprepare() {
-			$("#node-input-headless").val(this.headless === true ? "1" : "0");
-			$("#node-input-slowMo").val(this.slowMo);
-			$("#node-input-name").val(this.name);
-		}
-	}
-	RED.nodes.registerType("maya-browser-connect", MayaBrowserConnect);
+            await globalContext.set("maya", { browser });
+            node.send(msg);
+            node.status({
+              fill: "green",
+              shape: "dot",
+              text: "connected",
+            });
+          })
+          .catch((err) => {
+            this.log(err);
+            node.status({
+              fill: "red",
+              shape: "ring",
+              text: "error: " + err.toString().substring(0, 10) + "...",
+            });
+          });
+      }
+    });
+    oneditprepare: function oneditprepare() {
+      $("#node-input-headless").val(this.headless === true ? "1" : "0");
+      $("#node-input-slowMo").val(this.slowMo);
+      $("#node-input-name").val(this.name);
+    }
+  }
+  RED.nodes.registerType("maya-browser-connect", MayaBrowserConnect);
 };

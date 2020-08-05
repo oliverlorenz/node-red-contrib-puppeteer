@@ -4,6 +4,7 @@ module.exports = function (RED) {
     this.selector = config.selector;
     this.payloadTypeSelector = config.payloadTypeSelector;
     this.timeout = config.timeout;
+    this.selectorType = config.selectorType;
     var node = this;
 
     // Retrieve the config node
@@ -33,7 +34,7 @@ module.exports = function (RED) {
       var globalContext = this.context().global;
       let maya = globalContext.get("maya");
       let clickSelector = await getValue(this.selector, this.payloadTypeSelector, msg);
-      maya.browser.page.click(clickSelector, this.timeout)
+      maya.browser.page.click(this.selectorType, clickSelector, this.timeout)
         .then(async () => {
           await globalContext.set("maya", maya);
           node.send(msg);

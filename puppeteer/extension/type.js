@@ -6,6 +6,7 @@ module.exports = function (RED) {
     this.content = config.content;
     this.payloadTypeContent = config.payloadTypeContent;
     this.timeout = config.timeout;
+    this.selectorType = config.selectorType;
     var node = this;
 
     async function getValue(value, valueType, msg) {
@@ -36,9 +37,9 @@ module.exports = function (RED) {
       });
       var globalContext = this.context().global;
       let maya = globalContext.get("maya");
-      let typeSelector = await getValue(this.selector, this.payloadTypeSelector, msg);
-      let typeContent = await getValue(this.content, this.payloadTypeContent, msg);
-      maya.browser.page.type(typeSelector, typeContent, this.timeout)
+      let selector = await getValue(this.selector, this.payloadTypeSelector, msg);
+      let content = await getValue(this.content, this.payloadTypeContent, msg);
+      maya.browser.page.type(this.selectorType, selector, content, this.timeout)
         .then(async () => {
           await globalContext.set("maya", maya);
           node.send(msg);
