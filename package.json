@@ -41,7 +41,10 @@
       "puppeteer-page-wait-for-and-click": "puppeteer/page/waitFor-click.js",
       "puppeteer-page-find-and-click": "puppeteer/page/findLink.js",
       "maya-browser-connect":"puppeteer/extension/connect.js",
-      "maya-browser-open":"puppeteer/extension/open.js"
+      "maya-browser-open":"puppeteer/extension/open.js",
+      "maya-browser-click":"puppeteer/extension/click.js",
+      "maya-browser-type":"puppeteer/extension/type.js",
+      "maya-browser-clear":"puppeteer/extension/clear.js"
     }
   }
 }

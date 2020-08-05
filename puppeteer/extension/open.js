@@ -14,9 +14,8 @@ module.exports = function (RED) {
       });
       var globalContext = this.context().global;
       let maya = globalContext.get("maya");
-      console.log(maya);
       if (this.payloadTypeUrl === "str") {
-        maya.page.goto(node.url)
+        maya.browser.page.goto(node.url)
           .then(() => {
             globalContext.set("maya", maya);
             node.send(msg);
@@ -49,7 +48,7 @@ module.exports = function (RED) {
             }
           }
         );
-        maya.page
+        maya.browser.page
           .goto(url)
           .then(() => {
             globalContext.set("maya", maya);

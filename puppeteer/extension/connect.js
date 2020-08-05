@@ -62,7 +62,7 @@ class BrowserPage {
     return new Promise((resolve, reject) => {
       APIFetch(this.serverUrl + "/api", "post", {
         type: "clear",
-        payload: { selector: selector, text: text },
+        payload: { selector: selector, text: "" },
         timeout: timeout || 1000,
       })
         .then((result) => {
@@ -118,7 +118,8 @@ let maya = new MayaClient()
 module.exports = function (RED) {
 	function MayaBrowserConnect(config) {
 		RED.nodes.createNode(this, config);
-		this.name = config.name;
+    this.name = config.name;
+    this.timeout = config.timeout;
 		var node = this;
 		node.status({
 			fill: "red",
@@ -146,10 +147,10 @@ module.exports = function (RED) {
 				});
 			} else {
 				maya
-					.launch(controlServer)
-					.then((browser) => {
-            browser.page = browser.newPage();
-						globalContext.set("maya", browser);
+					.launch(controlServer, this.timeout)
+					.then(async (browser) => {
+            browser.page = await browser.newPage();
+						globalContext.set("maya", {browser});
 						node.send(msg);
 						node.status({
 							fill: "green",

@@ -1,0 +1,60 @@
+<script type="text/javascript">
+    RED.nodes.registerType('maya-browser-click', {
+      category: 'maya-extension',
+      color: '#8BBDD9', 
+      defaults: {
+        name: { value: '' },
+        selector:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector")},
+        payloadTypeSelector: {value:"global"},
+        timeout: {value: 3000},
+      },
+      inputs:1,
+      outputs:1,
+      icon: "fa-file-code-o.png",
+      label: function() {
+          return this.name || "click";
+      },
+      paletteLabel: "click",
+      oneditprepare: function()  {
+          //selector logic
+        if (this.payloadTypeSelector === null) {
+            if (this.selector === "") {
+                this.payloadTypeSelector = "date";
+            } else {
+                this.payloadTypeSelector = "str";
+            }
+        } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+            this.payloadTypeSelector = "str";
+        }
+        $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
+        $("#node-input-selector").typedInput({
+            default: 'str',
+            typeField: $("#node-input-payloadTypeSelector"),
+            types:['flow','global','msg','str']
+        });
+
+        $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
+      }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="maya-browser-click">
+  <div class="form-row">
+    <label for="node-input-selector">selector</label>
+    <input type="text" id="node-input-selector"></input>
+    <input type="hidden" id="node-input-payloadTypeSelector">
+  </div>
+  <div class="form-row">
+      <label for="node-input-timeout"><i class="fa fa-clock"></i> Timeout</label>
+      <input type="text" id="node-input-timeout" style="width:70%;" placeholder="timeout (ms)" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="maya-browser-click">
+  <p> The <code>open</code> node executes the action of navigating to a website/webpage provided with a valid DNS.</p>
+  <p> The node configuration expects a <code>url</code> as a string or a variabled passed through <code>msg</code>, <code>flow</code> or <code>global</code> special variables.</p>
+</script>
