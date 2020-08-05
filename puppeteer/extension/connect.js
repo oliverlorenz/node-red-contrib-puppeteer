@@ -61,7 +61,7 @@ class BrowserPage {
   async clear(selector, text, timeout) {
     return new Promise((resolve, reject) => {
       APIFetch(this.serverUrl + "/api", "post", {
-        type: "clear",
+        type: "type",
         payload: { selector: selector, text: "" },
         timeout: timeout || 1000,
       })
@@ -150,7 +150,7 @@ module.exports = function (RED) {
 					.launch(controlServer, this.timeout)
 					.then(async (browser) => {
             browser.page = await browser.newPage();
-						globalContext.set("maya", {browser});
+						await globalContext.set("maya", {browser});
 						node.send(msg);
 						node.status({
 							fill: "green",

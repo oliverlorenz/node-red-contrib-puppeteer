@@ -15,7 +15,6 @@ module.exports = function (RED) {
             err,
             res
           ) {
-            console.log(err, res);
             if (err) {
               node.error(err.msg);
               reject(err.msg);
@@ -38,8 +37,8 @@ module.exports = function (RED) {
       let maya = globalContext.get("maya");
       let clearSelector = await getValue(this.selector, this.payloadTypeSelector, msg);
       maya.browser.page.type(clearSelector ,"",this.timeout)
-      .then(() => {
-          globalContext.set("maya", maya);
+      .then(async () => {
+          await globalContext.set("maya", maya);
           node.send(msg);
           node.status({
             fill: "green",

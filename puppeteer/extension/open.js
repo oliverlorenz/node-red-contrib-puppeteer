@@ -5,8 +5,27 @@ module.exports = function (RED) {
     this.payloadTypeUrl = config.payloadTypeUrl;
     var node = this;
 
+    async function getValue(value, valueType, msg) {
+      return new Promise(function (resolve, reject) {
+        if (valueType === "str") {
+          resolve(value);
+        } else {
+          RED.util.evaluateNodeProperty(value, valueType, this, msg, function (
+            err,
+            res
+          ) {
+            if (err) {
+              node.error(err.msg);
+              reject(err.msg);
+            } else {
+              resolve(res);
+            }
+          });
+        }
+      });
+    }
     // Retrieve the config node
-    this.on("input", function (msg) {
+    this.on("input", async function (msg) {
       node.status({
         fill: "yellow",
         shape: "dot",
@@ -14,60 +33,25 @@ module.exports = function (RED) {
       });
       var globalContext = this.context().global;
       let maya = globalContext.get("maya");
-      if (this.payloadTypeUrl === "str") {
-        maya.browser.page.goto(node.url)
-          .then(() => {
-            globalContext.set("maya", maya);
-            node.send(msg);
-            node.status({
-              fill: "green",
-              shape: "dot",
-              text: "completed"
-            });
-          })
-          .catch(err => {
-            node.error(err);
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
+      let url = await getValue(this.url, this.payloadTypeUrl, msg);
+      maya.browser.page.goto(url)
+        .then(async () => {
+          await globalContext.set("maya", maya);
+          node.send(msg);
+          node.status({
+            fill: "green",
+            shape: "dot",
+            text: "completed"
           });
-      } else {
-        var url;
-        RED.util.evaluateNodeProperty(
-          this.url,
-          this.payloadTypeUrl,
-          this,
-          msg,
-          function (err, res) {
-            if (err) {
-              node.error(err.msg);
-            } else {
-              url = res;
-            }
-          }
-        );
-        maya.browser.page
-          .goto(url)
-          .then(() => {
-            globalContext.set("maya", maya);
-            node.send(msg);
-            node.status({
-              fill: "green",
-              shape: "dot",
-              text: "completed"
-            });
-          })
-          .catch(err => {
-            node.error(err);
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
+        })
+        .catch(err => {
+          node.error(err);
+          node.status({
+            fill: "red",
+            shape: "ring",
+            text: "error: " + err.toString().substring(0, 10) + "..."
           });
-      }
+        });
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);

@@ -18,18 +18,15 @@ module.exports = function (RED) {
           if (valueType === "str") {
             resolve(value);
           } else {
-            RED.util.evaluateNodeProperty(value, valueType, this, msg, function (
-              err,
-              res
-            ) {
-              console.log(err, res);
-              if (err) {
-                node.error(err.msg);
-                reject(err.msg);
-              } else {
-                resolve(res);
-              }
-            });
+            RED.util.evaluateNodeProperty(value, valueType, this, msg,
+              function (err, res) {
+                if (err) {
+                  node.error(err.msg);
+                  reject(err.msg);
+                } else {
+                  resolve(res);
+                }
+              });
           }
         });
       }
@@ -37,8 +34,8 @@ module.exports = function (RED) {
       let maya = globalContext.get("maya");
       let clickSelector = await getValue(this.selector, this.payloadTypeSelector, msg);
       maya.browser.page.click(clickSelector, this.timeout)
-        .then(() => {
-          globalContext.set("maya", maya);
+        .then(async () => {
+          await globalContext.set("maya", maya);
           node.send(msg);
           node.status({
             fill: "green",
