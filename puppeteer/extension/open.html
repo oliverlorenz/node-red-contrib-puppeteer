@@ -1,0 +1,54 @@
+<script type="text/javascript">
+    RED.nodes.registerType('maya-browser-open', {
+      category: 'maya-extension',
+      color: '#8BBDD9', 
+      defaults: {
+        name: { value: '' },
+        url:  {value:"", validate: RED.validators.typedInput("payloadTypeUrl")},
+        payloadTypeUrl: {value:"global"},
+      },
+      inputs:1,
+      outputs:1,
+      icon: "fa-file-code-o.png",
+      label: function() {
+          return this.name || "open";
+      },
+      paletteLabel: "open",
+      oneditprepare: function() {
+        if (this.payloadTypeUrl === null) {
+            if (this.url === "") {
+                this.payloadTypeUrl = "date";
+            } else {
+                this.payloadTypeUrl = "str";
+            }
+        } else if (this.payloadTypeUrl === 'string' || this.payloadTypeUrl === 'none') {
+            this.payloadTypeUrl = "str";
+        }
+        $("#node-input-payloadTypeUrl").val(this.payloadTypeUrl);
+        $("#node-input-url").typedInput({
+            default: 'str',
+            typeField: $("#node-input-payloadTypeUrl"),
+            types:['flow','global','msg','str']
+        });
+
+        $("#node-input-url").typedInput('type',this.payloadTypeUrl);
+      }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="maya-browser-open">
+  <div class="form-row">
+    <label for="node-input-url">url</label>
+    <input type="text" id="node-input-url"></input>
+    <input type="hidden" id="node-input-payloadTypeUrl">
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="maya-browser-open">
+  <p> The <code>open</code> node executes the action of navigating to a website/webpage provided with a valid DNS.</p>
+  <p> The node configuration expects a <code>url</code> as a string or a variabled passed through <code>msg</code>, <code>flow</code> or <code>global</code> special variables.</p>
+</script>

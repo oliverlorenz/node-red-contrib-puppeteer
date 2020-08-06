@@ -10,11 +10,11 @@
     "puppeteer": "^5.2.1"
   },
   "bugs": {
-    "url": "https://github.com/mayahq/maya-red-puppeteer/issues"
+    "url": "https://github.com/mayahq/maya-red-browser/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mayahq/maya-red-puppeteer"
+    "url": "https://github.com/mayahq/maya-red-browser"
   },
   "keywords": [
     "chrome",
@@ -39,7 +39,12 @@
       "puppeteer-page-querySelector": "puppeteer/page/querySelector.js",
       "puppeteer-page-select-inject": "puppeteer/page/injectValue.js",
       "puppeteer-page-wait-for-and-click": "puppeteer/page/waitFor-click.js",
-      "puppeteer-page-find-and-click": "puppeteer/page/findLink.js"
+      "puppeteer-page-find-and-click": "puppeteer/page/findLink.js",
+      "maya-browser-connect":"puppeteer/extension/connect.js",
+      "maya-browser-open":"puppeteer/extension/open.js",
+      "maya-browser-click":"puppeteer/extension/click.js",
+      "maya-browser-type":"puppeteer/extension/type.js",
+      "maya-browser-clear":"puppeteer/extension/clear.js"
     }
   }
 }
