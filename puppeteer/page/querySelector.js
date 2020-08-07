@@ -10,8 +10,6 @@ module.exports = function (RED) {
     // Retrieve the config node
     this.on("input", function (msg) {
       var data = msg.data;
-      const selector = "a";
-      const property = "innerText";
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
       if (this.payloadTypeSelector === "str" && this.payloadTypeProperty === "str") {
