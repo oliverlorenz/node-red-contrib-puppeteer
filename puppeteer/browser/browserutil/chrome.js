@@ -1,8 +1,10 @@
 const open = require('open');
 const axios = require('axios');
-const browser = process.env.MAYA_BROWSER_PATH;
+const os = require("os").platform;
+
+const browser = os === "darwin"? process.env.MAYA_BROWSER_PATH+"Chromium":os === "win32"?"":process.env.MAYA_BROWSER_PATH+"chrome";
 const chrome = async () => {
-  await open("", { app: [browser + "chrome", '--remote-debugging-port=9222', '--no-first-run', '--no-default-browser-check'] });
+  await open("", { app: [browser, '--remote-debugging-port=9222', '--no-first-run', '--no-default-browser-check'] });
   return await new Promise(r => setTimeout(r, 1000))
 };
 
