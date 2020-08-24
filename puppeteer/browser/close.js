@@ -1,5 +1,3 @@
-const puppeteer = require("puppeteer");
-
 module.exports = function(RED) {
   function PuppeteerBrowserClose(config) {
     RED.nodes.createNode(this, config);

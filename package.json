@@ -1,5 +1,5 @@
 {
-  "name": "maya-red-puppeteer",
+  "name": "maya-red-browser",
   "version": "0.2.0",
   "description": "A fork from Oliver Lorenz's node-red-contrib-puppeteer repo with some extra sauce. Allows controlling headless chrome from NodeRED. For original repo head over to https://github.com/oliverlorenz/node-red-contrib-puppeteer \n",
   "main": "index.js",
@@ -7,7 +7,10 @@
   "author": "Shubham Mishra <shubham.root@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "puppeteer": "^5.2.1"
+    "axios": "^0.19.2",
+    "open": "^7.1.0",
+    "puppeteer-core": "^5.2.1",
+    "uuid": "^8.3.0"
   },
   "bugs": {
     "url": "https://github.com/mayahq/maya-red-browser/issues"
@@ -40,11 +43,12 @@
       "puppeteer-page-select-inject": "puppeteer/page/injectValue.js",
       "puppeteer-page-wait-for-and-click": "puppeteer/page/waitFor-click.js",
       "puppeteer-page-find-and-click": "puppeteer/page/findLink.js",
-      "maya-browser-connect":"puppeteer/extension/connect.js",
-      "maya-browser-open":"puppeteer/extension/open.js",
-      "maya-browser-click":"puppeteer/extension/click.js",
-      "maya-browser-type":"puppeteer/extension/type.js",
-      "maya-browser-clear":"puppeteer/extension/clear.js"
+      "maya-browser-connect": "puppeteer/extension/connect.js",
+      "maya-browser-open": "puppeteer/extension/open.js",
+      "maya-browser-click": "puppeteer/extension/click.js",
+      "maya-browser-type": "puppeteer/extension/type.js",
+      "maya-browser-clear": "puppeteer/extension/clear.js",
+      "puppeteer-page-multiselect": "puppeteer/page/multiselect.js"
     }
   }
 }

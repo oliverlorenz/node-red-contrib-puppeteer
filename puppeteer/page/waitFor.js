@@ -1,4 +1,4 @@
-module.exports = function(RED) {
+module.exports = function (RED) {
   function PuppeteerPageWaitFor(config) {
     RED.nodes.createNode(this, config);
     this.selector = config.selector;
@@ -7,7 +7,7 @@ module.exports = function(RED) {
     var node = this;
 
     // Retrieve the config node
-    this.on("input", function(msg) {
+    this.on("input", async function (msg) {
       var data = msg.data;
       node.status({
         fill: "yellow",
@@ -16,38 +16,25 @@ module.exports = function(RED) {
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      if(this.payloadTypeSelector === "str" || this.payloadTypeSelector ==="num"){
-        puppeteer.page
-          .waitFor(node.selector, { timeout: this.timeout })
-          .then(() => {
-            globalContext.set("puppeteer", puppeteer);
-            node.send([msg, null]);
-            node.status({});
-          })
-          .catch(err => {
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
-            node.send([null, msg]);
-          });
-      }else {
-        var selector;
-        RED.util.evaluateNodeProperty(
-          this.selector,
-          this.payloadTypeSelector,
-          this,
-          msg,
-          function (err, res) {
-            if (err) {
-              node.error(err.msg);
-            } else {
-              selector = res;
-            }
+      async function getValue(value, valueType, msg) {
+        return new Promise(function (resolve, reject) {
+          if (valueType === "str") {
+            resolve(value);
+          } else {
+            RED.util.evaluateNodeProperty(value, valueType, this, msg,
+              function (err, res) {
+                if (err) {
+                  node.error(err.msg);
+                  reject(err.msg);
+                } else {
+                  resolve(res);
+                }
+              });
           }
-        );
-        puppeteer.page
+        });
+      }
+      let selector = await getValue(this.selector, this.payloadTypeSelector, msg);
+      puppeteer.page
         .waitFor(selector, { timeout: this.timeout })
         .then(() => {
           globalContext.set("puppeteer", puppeteer);
@@ -62,7 +49,6 @@ module.exports = function(RED) {
           });
           node.send([null, msg]);
         });
-      }
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);

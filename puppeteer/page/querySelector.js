@@ -23,7 +23,7 @@ module.exports = function (RED) {
               property: this.property
             }
           )
-          .then(payload => {
+          .then((payload) => {
             globalContext.set("puppeteer", puppeteer);
             msg.payload = payload;
             node.send([msg, msg, msg]);

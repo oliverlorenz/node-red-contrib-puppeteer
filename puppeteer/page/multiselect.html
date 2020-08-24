@@ -1,0 +1,106 @@
+<script type="text/javascript">
+    RED.nodes.registerType('puppeteer-page-multiselect', {
+      category: 'puppeteerdocument',
+      color: '#A8857D',
+      defaults: {
+        name: { value: '' },
+        header: {value:"", required:true},
+        selector1:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector"), required:true},
+        selector2:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector"), required:true},
+        payloadTypeSelector: {value: 'global'},
+        property : { value: "querySelector"},
+        order: {value: 0},
+        options: {value:[{header:'', selector1:'', selector2:'', required:true}], validate:function(value) {
+                if (value.length ) {
+                    for (var i = 0; i < value.length; i++) {
+                        if (!value[i].value) {
+                            return false;
+                        }
+                    }
+                }
+                else {
+                    return false;
+                }
+                return true;
+            }, required:true},
+      },
+      inputs:1,
+      outputs:1,
+      icon: "fa-file-code-o.png",
+      label: function() {
+          return this.name || "multi-select";
+      },
+      paletteLabel: "multi-select",
+      oneditprepare: function() {
+        if (this.payloadTypeSelector === null) {
+            if (this.selector1 === "") {
+                this.payloadTypeSelector = "date";
+            } else {
+                this.payloadTypeSelector = "str";
+            }
+        } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+            this.payloadTypeSelector = "str";
+        }
+        $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
+        $("#node-input-selector1").typedInput({
+            default: 'str',
+            typeField: $("#node-input-payloadTypeSelector"),
+            types:['flow','global','msg','str']
+        });
+
+        $("#node-input-selector1").typedInput('type',this.payloadTypeSelector);
+
+        if (this.payloadTypeSelector === null) {
+            if (this.selector2 === "") {
+                this.payloadTypeSelector = "date";
+            } else {
+                this.payloadTypeSelector = "str";
+            }
+        } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
+            this.payloadTypeSelector = "str";
+        }
+        $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
+        $("#node-input-selector2").typedInput({
+            default: 'str',
+            typeField: $("#node-input-payloadTypeSelector"),
+            types:['flow','global','msg','str']
+        });
+
+        $("#node-input-selector2").typedInput('type',this.payloadTypeSelector);
+      }
+    }
+    );
+</script>
+
+<script type="text/x-red" data-template-name="puppeteer-page-multiselect">
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name" style="width:70%;" placeholder="Name" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-header"><i class="fa fa-tag"></i> Header</label>
+      <input type="text" id="node-input-header" style="width:70%;" placeholder="header for extracted list" />
+  </div>
+  <div class="form-row">
+      <label for="node-input-selector1">sample 1</label>
+      <input type="text" id="node-input-selector1"></input>
+      <input type="hidden" id="node-input-payloadTypeSelector">
+  </div>
+  <div class="form-row">
+      <label for="node-input-selector2">sample 2</label>
+      <input type="text" id="node-input-selector2"></input>
+      <input type="hidden" id="node-input-payloadTypeSelector">
+  </div>
+  <div class="form-row">
+    <label for="node-input-property"><span> property </span></label>
+    <select id="node-input-property" type="text">
+        <option value="innerText" selected>innerText</option>
+        <option value="innerHtml">innerHtml</option>
+        <option value="title">title</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="puppeteer-page-multiselect">
+
+</script>

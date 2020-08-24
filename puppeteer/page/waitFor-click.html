@@ -24,13 +24,15 @@
             }
         } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
             this.payloadTypeSelector = "str";
+        } else if(this.payloadTypeSelector === 'number'){
+          this.payloadTypeSelector = "number";
         }
 
         $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
         $("#node-input-selector").typedInput({
             default: 'str',
             typeField: $("#node-input-payloadTypeSelector"),
-            types:['flow','global','msg','str']
+            types:['flow','global','msg','str', 'number']
         });
 
         $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
