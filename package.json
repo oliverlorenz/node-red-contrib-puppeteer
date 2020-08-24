@@ -9,7 +9,8 @@
   "dependencies": {
     "axios": "^0.19.2",
     "open": "^7.1.0",
-    "puppeteer-core": "^5.2.1"
+    "puppeteer-core": "^5.2.1",
+    "uuid": "^8.3.0"
   },
   "bugs": {
     "url": "https://github.com/mayahq/maya-red-browser/issues"

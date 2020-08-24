@@ -1,6 +1,4 @@
 const controlServer = process.env.BROWSER_CONTROL ? process.env.BROWSER_CONTROL : "http://localhost:8080";
-// const {MayaClient}  = require("./utils/index");
-// console.log(MayaClient);
 
 const APIFetch = require("./utils/api");
 const { v4: uuidv4 } = require("uuid");
@@ -180,11 +178,6 @@ module.exports = function (RED) {
           });
       }
     });
-    oneditprepare: function oneditprepare() {
-      $("#node-input-headless").val(this.headless === true ? "1" : "0");
-      $("#node-input-slowMo").val(this.slowMo);
-      $("#node-input-name").val(this.name);
-    }
   }
   RED.nodes.registerType("maya-browser-connect", MayaBrowserConnect);
 };
