@@ -1,4 +1,5 @@
-module.exports = function(RED) {
+const { getValue } = require("../pageutils/getValue");
+module.exports = function (RED) {
   function PuppeteerPageGoto(config) {
     RED.nodes.createNode(this, config);
     this.url = config.url;
@@ -6,69 +7,41 @@ module.exports = function(RED) {
     var node = this;
 
     // Retrieve the config node
-    this.on("input", function(msg) {
+    this.on("input", function (msg) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "going to: " + node.url !== "" ? node.url.toString().substring(0, 15): msg.url.toString().substring(0, 15) + "..."
+        text:
+          "going to: " + node.url !== ""
+            ? node.url.toString().substring(0, 15)
+            : msg.url.toString().substring(0, 15) + "...",
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      if (this.payloadTypeUrl === "str") {
-        puppeteer.page
-          .goto(node.url)
-          .then(() => {
-            globalContext.set("puppeteer", puppeteer);
-            node.send(msg);
-            node.status({
-              fill: "green",
-              shape: "dot",
-              text: "completed"
-            });
-          })
-          .catch(err => {
-            node.error(err);
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
+      let url = await getValue(
+        this.url,
+        this.payloadTypeUrl,
+        msg
+      );
+      puppeteer.page
+        .goto(url)
+        .then(() => {
+          globalContext.set("puppeteer", puppeteer);
+          node.send(msg);
+          node.status({
+            fill: "green",
+            shape: "dot",
+            text: "completed",
           });
-      } else {
-        var url;
-        RED.util.evaluateNodeProperty(
-          this.url,
-          this.payloadTypeUrl,
-          this,
-          msg,
-          function (err, res) {
-            if (err) {
-              node.error(err.msg);
-            } else {
-              url = res;
-            }
-          }
-        );
-        puppeteer.page
-          .goto(url)
-          .then(() => {
-            globalContext.set("puppeteer", puppeteer);
-            node.send(msg);
-            node.status({
-              fill: "green",
-              shape: "dot",
-              text: "completed"
-            });
-          })
-          .catch(err => {
-            node.error(err);
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
+        })
+        .catch((err) => {
+          node.error(err);
+          node.status({
+            fill: "red",
+            shape: "ring",
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
-      }
+        });
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);

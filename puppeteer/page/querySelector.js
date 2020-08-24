@@ -1,3 +1,5 @@
+const { getValue } = require("../pageutils/getValue");
+
 module.exports = function (RED) {
   function PuppeteerDocumentQuerySelector(config) {
     RED.nodes.createNode(this, config);
@@ -12,66 +14,16 @@ module.exports = function (RED) {
       var data = msg.data;
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      if (this.payloadTypeSelector === "str" && this.payloadTypeProperty === "str") {
-        puppeteer.page
-          .evaluate(
-            ({ selector, property }) => {
-              return document.querySelector(selector)[property];
-            },
-            {
-              selector: this.selector,
-              property: this.property
-            }
-          )
-          .then((payload) => {
-            globalContext.set("puppeteer", puppeteer);
-            msg.payload = payload;
-            node.send([msg, msg, msg]);
-          })
-          .catch(err => {
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
-          });
-      }
-      else {
-        var selector, property;
-        RED.util.evaluateNodeProperty(
-          this.selector,
-          this.payloadTypeSelector,
-          this,
-          msg,
-          function (err, res) {
-            if (err) {
-              if (this.payloadTypeSelector === "str") {
-                selector = res;
-              } else {
-                node.error(err.msg);
-              }
-            } else {
-              selector = res;
-            }
-          }
-        );
-        RED.util.evaluateNodeProperty(
-          this.property,
-          this.payloadTypeSelector,
-          this,
-          msg,
-          function (err, res) {
-            if (err) {
-              if (this.payloadTypeProperty === "str") {
-                property = res;
-              } else {
-                node.error(err.msg);
-              }
-            } else {
-              property = res;
-            }
-          }
-        );
+      let selector = await getValue(
+        this.selector,
+        this.payloadTypeSelector,
+        msg
+      );
+      let property = await getValue(
+        this.property,
+        this.payloadTypeProperty,
+        msg
+      );
         puppeteer.page
           .evaluate(
             ({ selector, property }) => {
@@ -79,22 +31,21 @@ module.exports = function (RED) {
             },
             {
               selector: selector,
-              property: property
+              property: property,
             }
           )
-          .then(payload => {
+          .then((payload) => {
             globalContext.set("puppeteer", puppeteer);
             msg.payload = payload;
             node.send([msg, msg, msg]);
           })
-          .catch(err => {
+          .catch((err) => {
             node.status({
               fill: "red",
               shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
+              text: "error: " + err.toString().substring(0, 10) + "...",
             });
           });
-      }
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);

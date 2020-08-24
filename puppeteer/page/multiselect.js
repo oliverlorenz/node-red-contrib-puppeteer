@@ -1,3 +1,5 @@
+const { getValue } = require("../pageutils/getValue");
+
 module.exports = function (RED) {
   function PuppeteerDocumentArraySelector(config) {
     const arraySelect = require("../pageutils/arrayselect");
@@ -16,60 +18,50 @@ module.exports = function (RED) {
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
 
-      async function getValue(value, valueType, msg) {
-        return new Promise(function (resolve, reject) {
-          if (valueType === "str") {
-            resolve(value);
-          } else {
-            RED.util.evaluateNodeProperty(value, valueType, this, msg,
-              function (err, res) {
-                if (err) {
-                  node.error(err.msg);
-                  reject(err.msg);
-                } else {
-                  resolve(res);
-                }
-              });
-          }
-        });
-      }
-
-      let selector1 = await getValue(this.selector1, this.payloadTypeSelector, msg);
-      let selector2 = await getValue(this.selector2, this.payloadTypeSelector, msg);
+      let selector1 = await getValue(
+        this.selector1,
+        this.payloadTypeSelector,
+        msg
+      );
+      let selector2 = await getValue(
+        this.selector2,
+        this.payloadTypeSelector,
+        msg
+      );
 
       let selector_n = arraySelect(selector1, selector2);
       puppeteer.page
         .evaluate(
           async ({ selector, property }) => {
             let elements = Array.from(document.querySelectorAll(selector));
-            let properties = elements.map(element => {
-              return element[property]
-            })
+            let properties = elements.map((element) => {
+              return element[property];
+            });
             return properties;
           },
           {
             selector: selector_n,
-            property: this.property
+            property: this.property,
           }
         )
         .then((payload) => {
           globalContext.set("puppeteer", puppeteer);
           msg.payload = {
-            [this.header]: payload
+            [this.header]: payload,
           };
           node.status({
             fill: "green",
             shape: "dot",
-            text: "completed.."
+            text: "completed..",
           });
           node.send([msg]);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           node.status({
             fill: "red",
             shape: "ring",
-            text: "error: " + err.toString().substring(0, 10) + "..."
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
         });
     });

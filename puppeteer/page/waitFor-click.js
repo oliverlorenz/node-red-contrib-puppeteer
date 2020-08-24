@@ -1,9 +1,11 @@
+const { getValue } = require("../pageutils/getValue");
+
 module.exports = function (RED) {
   function PuppeteerPageWaitForClick(config) {
     RED.nodes.createNode(this, config);
     this.selector = config.selector;
     this.payloadTypeSelector = config.payloadTypeSelector;
-    this.timeout = config.timeout
+    this.timeout = config.timeout;
     var node = this;
 
     // Retrieve the config node
@@ -12,36 +14,23 @@ module.exports = function (RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "clicking: " + node.selector.toString().substring(0, 10) + "..."
+        text: "clicking: " + node.selector.toString().substring(0, 10) + "...",
       });
 
-      async function getValue(value, valueType, msg) {
-        return new Promise(function (resolve, reject) {
-          if (valueType === "str" || valueType ==="number") {
-            resolve(value);
-          } else {
-            RED.util.evaluateNodeProperty(value, valueType, this, msg,
-              function (err, res) {
-                if (err) {
-                  node.error(err.msg);
-                  reject(err.msg);
-                } else {
-                  resolve(res);
-                }
-              });
-          }
-        });
-      }
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      var selector = await getValue(this.selector, this.payloadTypeSelector, msg)
+      var selector = await getValue(
+        this.selector,
+        this.payloadTypeSelector,
+        msg
+      );
       await puppeteer.page
         .waitFor(selector, { timeout: this.timeout })
-        .catch(err => {
+        .catch((err) => {
           node.status({
             fill: "red",
             shape: "ring",
-            text: "stat: " + err.toString().substring(0, 20) + "..."
+            text: "stat: " + err.toString().substring(0, 20) + "...",
           });
           node.send([null, msg]);
         });
@@ -52,19 +41,22 @@ module.exports = function (RED) {
           node.status({
             fill: "green",
             shape: "dot",
-            text: "completed"
+            text: "completed",
           });
           node.send([msg, null]);
         })
-        .catch(err => {
+        .catch((err) => {
           node.error(err);
           node.status({
             fill: "red",
             shape: "ring",
-            text: "dyn: " + err.toString().substring(0, 20) + "..."
+            text: "dyn: " + err.toString().substring(0, 20) + "...",
           });
         });
     });
   }
-  RED.nodes.registerType("puppeteer-page-waitFor-click", PuppeteerPageWaitForClick);
+  RED.nodes.registerType(
+    "puppeteer-page-waitFor-click",
+    PuppeteerPageWaitForClick
+  );
 };

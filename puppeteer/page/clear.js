@@ -1,3 +1,4 @@
+const { getValue } = require("../pageutils/getValue");
 module.exports = function (RED) {
   function PuppeteerPageClear(config) {
     RED.nodes.createNode(this, config);
@@ -11,62 +12,32 @@ module.exports = function (RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "clicking: " + this.selector.toString().substring(0, 10) + "..."
+        text: "clicking: " + this.selector.toString().substring(0, 10) + "...",
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      if (this.payloadTypeSelector === "str") {
-        puppeteer.page
-          .evaluate(selector => {
-            document.querySelector(selector).value = ""
-          }, this.selector
-          ).then(() => {
+      let selector = await getValue(
+        this.selector,
+        this.payloadTypeSelector,
+        msg
+      );
+      puppeteer.page
+          .evaluate((selector) => {
+            document.querySelector(selector).value = "";
+          }, selector)
+          .then(() => {
             globalContext.set("puppeteer", puppeteer);
             node.send(msg);
             node.status({});
           })
-          .catch(err => {
+          .catch((err) => {
             node.error(err);
             node.status({
               fill: "red",
               shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
+              text: "error: " + err.toString().substring(0, 10) + "...",
             });
           });
-      } else {
-        var selector;
-        RED.util.evaluateNodeProperty(
-          this.selector,
-          this.payloadTypeSelector,
-          this,
-          msg,
-          function (err, res) {
-            if (err) {
-              node.error(err.msg);
-            } else {
-              selector = res;
-            }
-          }
-        );
-        console.log("Clearing :", selector);
-        puppeteer.page
-          .evaluate(selector => {
-            document.querySelector(selector).value = ""
-          }, selector
-          ).then(() => {
-            globalContext.set("puppeteer", puppeteer);
-            node.send(msg);
-            node.status({});
-          })
-          .catch(err => {
-            node.error(err);
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
-          });
-      }
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);

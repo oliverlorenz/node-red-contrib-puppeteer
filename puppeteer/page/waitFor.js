@@ -1,3 +1,4 @@
+const { getValue } = require("../pageutils/getValue");
 module.exports = function (RED) {
   function PuppeteerPageWaitFor(config) {
     RED.nodes.createNode(this, config);
@@ -12,28 +13,16 @@ module.exports = function (RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "finding: " + node.selector.toString().substring(0, 10) + "..."
+        text: "finding: " + node.selector.toString().substring(0, 10) + "...",
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      async function getValue(value, valueType, msg) {
-        return new Promise(function (resolve, reject) {
-          if (valueType === "str") {
-            resolve(value);
-          } else {
-            RED.util.evaluateNodeProperty(value, valueType, this, msg,
-              function (err, res) {
-                if (err) {
-                  node.error(err.msg);
-                  reject(err.msg);
-                } else {
-                  resolve(res);
-                }
-              });
-          }
-        });
-      }
-      let selector = await getValue(this.selector, this.payloadTypeSelector, msg);
+
+      let selector = await getValue(
+        this.selector,
+        this.payloadTypeSelector,
+        msg
+      );
       puppeteer.page
         .waitFor(selector, { timeout: this.timeout })
         .then(() => {
@@ -41,11 +30,11 @@ module.exports = function (RED) {
           node.send([msg, null]);
           node.status({});
         })
-        .catch(err => {
+        .catch((err) => {
           node.status({
             fill: "red",
             shape: "ring",
-            text: "error: " + err.toString().substring(0, 10) + "..."
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
           node.send([null, msg]);
         });
