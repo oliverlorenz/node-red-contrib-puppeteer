@@ -29,27 +29,32 @@ module.exports = function (RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "going to: " + node.url !== "" ? node.url.toString().substring(0, 15) : msg.url.toString().substring(0, 15) + "..."
+        text:
+          "going to: " + node.url !== ""
+            ? node.url.toString().substring(0, 15)
+            : msg.url.toString().substring(0, 15) + "...",
       });
       var globalContext = this.context().global;
       let maya = globalContext.get("maya");
       let url = await getValue(this.url, this.payloadTypeUrl, msg);
-      maya.browser.page.goto(url)
+      maya.browser.page
+        .goto(url)
         .then(async () => {
+          console.log("did work");
           await globalContext.set("maya", maya);
           node.send(msg);
           node.status({
             fill: "green",
             shape: "dot",
-            text: "completed"
+            text: "completed",
           });
         })
-        .catch(err => {
+        .catch((err) => {
           node.error(err);
           node.status({
             fill: "red",
             shape: "ring",
-            text: "error: " + err.toString().substring(0, 10) + "..."
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
         });
     });

@@ -5,7 +5,7 @@
       defaults: {
         name: { value: '' },
         selector:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector")},
-        payloadTypeSelector: {value:"global"},
+        payloadTypeSelector: {value:"str"},
         timeout: { value: 30000, required: true },
       },
       inputs:1,
@@ -24,25 +24,23 @@
             }
         } else if (this.payloadTypeSelector === 'string' || this.payloadTypeSelector === 'none') {
             this.payloadTypeSelector = "str";
-        } else if(this.payloadTypeSelector === 'number'){
-          this.payloadTypeSelector = "number";
         }
 
         $("#node-input-payloadTypeSelector").val(this.payloadTypeSelector);
-        $("#node-input-selector").typedInput({
-            default: 'str',
-            typeField: $("#node-input-payloadTypeSelector"),
-            types:['flow','global','msg','str', 'number']
-        });
+            $("#node-input-selector").typedInput({
+                default: 'str',
+                typeField: $("#node-input-payloadTypeSelector"),
+                types:['flow','global','msg','str', "num"]
+            });
 
-        $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
+            $("#node-input-selector").typedInput('type',this.payloadTypeSelector);
       }
     });
 </script>
 
 <script type="text/x-red" data-template-name="puppeteer-page-waitFor-click">
   <div class="form-row">
-    <label for="node-input-timeout">wait for(ms)/seelctor</label>
+    <label for="node-input-timeout">wait for(ms)/selector</label>
     <input type="text" id="node-input-timeout"></input>
   </div>
   <div class="form-row">
