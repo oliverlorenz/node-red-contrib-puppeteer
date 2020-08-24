@@ -9,6 +9,20 @@
         selector2:  {value:"", validate: RED.validators.typedInput("payloadTypeSelector"), required:true},
         payloadTypeSelector: {value: 'global'},
         property : { value: "querySelector"},
+        order: {value: 0},
+        options: {value:[{header:'', selector1:'', selector2:'', required:true}], validate:function(value) {
+                if (value.length ) {
+                    for (var i = 0; i < value.length; i++) {
+                        if (!value[i].value) {
+                            return false;
+                        }
+                    }
+                }
+                else {
+                    return false;
+                }
+                return true;
+            }, required:true},
       },
       inputs:1,
       outputs:1,
