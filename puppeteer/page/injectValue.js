@@ -1,4 +1,5 @@
 const { getValue } = require("../pageutils/getValue");
+const { highlightElement } = require("../pageutils/highlightelem");
 
 module.exports = function (RED) {
   function PuppeteerDocumentSelectorInjector(config) {
@@ -34,6 +35,8 @@ module.exports = function (RED) {
         this.payloadTypeProperty,
         msg
       );
+
+      highlightElement(puppeteer.page, selector, "injectValue");
       await puppeteer.page
         .evaluate(
           async ({ selector, injectValue }) => {

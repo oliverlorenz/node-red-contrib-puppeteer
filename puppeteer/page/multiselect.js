@@ -3,7 +3,9 @@ const { getValue } = require("../pageutils/getValue");
 module.exports = function (RED) {
   function PuppeteerDocumentArraySelector(config) {
     const arraySelect = require("../pageutils/arrayselect");
-    const { highlightElem } = require("../pageutils/highlighelem");
+    const {
+      highlightElem,
+    } = require("maya-red-browser/puppeteer/pageutils/highlightelem");
     RED.nodes.createNode(this, config);
     this.selector1 = config.selector1;
     this.selector2 = config.selector2;

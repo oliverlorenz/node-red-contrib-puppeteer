@@ -1,5 +1,5 @@
 const { getValue } = require("../pageutils/getValue");
-
+const { highlightElement } = require("../pageutils/highlightelem");
 module.exports = function (RED) {
   function PuppeteerDocumentQuerySelector(config) {
     RED.nodes.createNode(this, config);
@@ -10,7 +10,7 @@ module.exports = function (RED) {
     var node = this;
 
     // Retrieve the config node
-    this.on("input", function (msg) {
+    this.on("input", async function (msg) {
       var data = msg.data;
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
@@ -24,28 +24,30 @@ module.exports = function (RED) {
         this.payloadTypeProperty,
         msg
       );
-        puppeteer.page
-          .evaluate(
-            ({ selector, property }) => {
-              return document.querySelector(selector)[property];
-            },
-            {
-              selector: selector,
-              property: property,
-            }
-          )
-          .then((payload) => {
-            globalContext.set("puppeteer", puppeteer);
-            msg.payload = payload;
-            node.send([msg, msg, msg]);
-          })
-          .catch((err) => {
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "...",
-            });
+
+      highlightElement(puppeteer.page, selector, "get property");
+      puppeteer.page
+        .evaluate(
+          ({ selector, property }) => {
+            return document.querySelector(selector)[property];
+          },
+          {
+            selector: selector,
+            property: property,
+          }
+        )
+        .then((payload) => {
+          globalContext.set("puppeteer", puppeteer);
+          msg.payload = payload;
+          node.send([msg, msg, msg]);
+        })
+        .catch((err) => {
+          node.status({
+            fill: "red",
+            shape: "ring",
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
+        });
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);

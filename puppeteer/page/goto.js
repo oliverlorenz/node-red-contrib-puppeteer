@@ -7,7 +7,7 @@ module.exports = function (RED) {
     var node = this;
 
     // Retrieve the config node
-    this.on("input", function (msg) {
+    this.on("input", async function (msg) {
       node.status({
         fill: "yellow",
         shape: "dot",
@@ -18,11 +18,7 @@ module.exports = function (RED) {
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      let url = await getValue(
-        this.url,
-        this.payloadTypeUrl,
-        msg
-      );
+      let url = await getValue(this.url, this.payloadTypeUrl, msg);
       puppeteer.page
         .goto(url)
         .then(() => {

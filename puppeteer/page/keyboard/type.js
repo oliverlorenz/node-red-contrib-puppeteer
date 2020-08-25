@@ -1,4 +1,6 @@
-module.exports = function(RED) {
+const { getValue } = require("../../pageutils/getValue");
+const { highlightElement } = require("../../pageutils/highlightelem");
+module.exports = function (RED) {
   function PuppeteerPageKeyboardType(config) {
     RED.nodes.createNode(this, config);
     // this.text = config.text
@@ -8,62 +10,32 @@ module.exports = function(RED) {
     var node = this;
 
     //modifying code here
-    this.on("input", function(msg) {
+    this.on("input", async function (msg) {
       var data = msg.data;
       // console.log(this.payloadType, this.payload);
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
+      let payload = await getValue(this.payload, this.payloadType, msg);
 
-      if (this.payloadType === "str") {
-        try {
-          // msg.payload = res;
+      node.status({
+        fill: "yellow",
+        shape: "dot",
+        text: "typing: " + payload.toString().substring(0, 10) + "...",
+      });
+      puppeteer.page.keyboard
+        .type(payload)
+        .then(() => {
+          globalContext.set("puppeteer", puppeteer);
+          node.send(msg);
+          node.status({});
+        })
+        .catch((err) => {
           node.status({
-            fill: "yellow",
-            shape: "dot",
-            text: "typing: " + this.payload.toString().substring(0, 10) + "..."
+            fill: "red",
+            shape: "ring",
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
-          puppeteer.page.keyboard.type(this.payload).then(() => {
-            globalContext.set("puppeteer", puppeteer);
-            node.send(msg);
-            node.status({});
-          });
-        } catch (err) {
-          this.error(err, msg);
-        }
-      } else {
-        RED.util.evaluateNodeProperty(
-          this.payload,
-          this.payloadType,
-          this,
-          msg,
-          function(err, res) {
-            if (err) {
-              node.error(err, msg);
-            } else {
-              // msg.payload = res;
-              node.status({
-                fill: "yellow",
-                shape: "dot",
-                text: "typing: " + res.toString().substring(0, 10) + "..."
-              });
-              puppeteer.page.keyboard
-                .type(res)
-                .then(() => {
-                  globalContext.set("puppeteer", puppeteer);
-                  node.send(msg);
-                  node.status({});
-                })
-                .catch(err => {
-                  node.status({
-                    fill: "red",
-                    shape: "ring",
-                    text: "error: " + err.toString().substring(0, 10) + "..."
-                  });
-                });
-            }
-          }
-        );
-      }
+        });
     });
     // Retrieve the config node
     // this.on('input', function (msg) {

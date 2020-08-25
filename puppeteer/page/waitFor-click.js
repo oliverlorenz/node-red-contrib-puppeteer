@@ -1,5 +1,5 @@
 const { getValue } = require("../pageutils/getValue");
-
+const { highlightElement } = require("../pageutils/highlightelem");
 module.exports = function (RED) {
   function PuppeteerPageWaitForClick(config) {
     RED.nodes.createNode(this, config);
@@ -24,6 +24,7 @@ module.exports = function (RED) {
         this.payloadTypeSelector,
         msg
       );
+      highlightElement(puppeteer.page, selector, "click");
       await puppeteer.page
         .waitFor(selector, { timeout: this.timeout })
         .catch((err) => {

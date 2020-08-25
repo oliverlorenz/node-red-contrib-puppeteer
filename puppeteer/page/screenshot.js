@@ -1,18 +1,18 @@
-module.exports = function(RED) {
+module.exports = function (RED) {
   function PuppeteerPageScreenshot(config) {
     RED.nodes.createNode(this, config);
     var node = this;
 
     // Retrieve the config node
-    this.on("input", function(msg) {
+    this.on("input", function (msg) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "taking screenshot"
+        text: "taking screenshot",
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      puppeteer.page.screenshot().then(buffer => {
+      puppeteer.page.screenshot().then((buffer) => {
         puppeteer.screenshot = buffer;
         msg.screenshot = buffer;
         globalContext.set("puppeteer", puppeteer);

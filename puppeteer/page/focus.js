@@ -7,12 +7,13 @@ module.exports = function (RED) {
     var node = this;
 
     // Retrieve the config node
-    this.on("input", function (msg) {
+    this.on("input", async function (msg) {
       var data = msg.data;
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "focusing on: " + node.selector.toString().substring(0, 10) + "..."
+        text:
+          "focusing on: " + node.selector.toString().substring(0, 10) + "...",
       });
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
@@ -22,24 +23,24 @@ module.exports = function (RED) {
         msg
       );
       puppeteer.page
-          .focus(selector)
-          .then(() => {
-            globalContext.set("puppeteer", puppeteer);
-            node.send(msg);
-            node.status({
-              fill: "green",
-              shape: "dot",
-              text: "completed"
-            });
-          })
-          .catch(err => {
-            node.error(err);
-            node.status({
-              fill: "red",
-              shape: "ring",
-              text: "error: " + err.toString().substring(0, 10) + "..."
-            });
+        .focus(selector)
+        .then(() => {
+          globalContext.set("puppeteer", puppeteer);
+          node.send(msg);
+          node.status({
+            fill: "green",
+            shape: "dot",
+            text: "completed",
           });
+        })
+        .catch((err) => {
+          node.error(err);
+          node.status({
+            fill: "red",
+            shape: "ring",
+            text: "error: " + err.toString().substring(0, 10) + "...",
+          });
+        });
     });
     oneditprepare: function oneditprepare() {
       $("#node-input-name").val(this.name);
