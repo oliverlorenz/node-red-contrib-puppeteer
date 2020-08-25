@@ -1,4 +1,4 @@
-async function getValue(value, valueType, msg) {
+async function getValue(value, valueType, msg, RED) {
   return new Promise(function (resolve, reject) {
     if (valueType === "str" || valueType === "number") {
       resolve(value);

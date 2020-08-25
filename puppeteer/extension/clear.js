@@ -32,27 +32,33 @@ module.exports = function (RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "clearing..."
+        text: "clearing...",
       });
       var globalContext = this.context().global;
       let maya = globalContext.get("maya");
-      let selector = await getValue(this.selector, this.payloadTypeSelector, msg);
-      maya.browser.page.type(this.selectorType, selector ,"",this.timeout)
-      .then(async () => {
+      let selector = await getValue(
+        this.selector,
+        this.payloadTypeSelector,
+        msg,
+        RED
+      );
+      maya.browser.page
+        .type(this.selectorType, selector, "", this.timeout)
+        .then(async () => {
           await globalContext.set("maya", maya);
           node.send(msg);
           node.status({
             fill: "green",
             shape: "dot",
-            text: "completed"
+            text: "completed",
           });
         })
-        .catch(err => {
+        .catch((err) => {
           node.error(err);
           node.status({
             fill: "red",
             shape: "ring",
-            text: "error: " + err.toString().substring(0, 10) + "..."
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
         });
     });

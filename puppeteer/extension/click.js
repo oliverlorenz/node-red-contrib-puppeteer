@@ -12,14 +12,18 @@ module.exports = function (RED) {
       node.status({
         fill: "yellow",
         shape: "dot",
-        text: "clicking..."
+        text: "clicking...",
       });
       async function getValue(value, valueType, msg) {
         return new Promise(function (resolve, reject) {
           if (valueType === "str") {
             resolve(value);
           } else {
-            RED.util.evaluateNodeProperty(value, valueType, this, msg,
+            RED.util.evaluateNodeProperty(
+              value,
+              valueType,
+              this,
+              msg,
               function (err, res) {
                 if (err) {
                   node.error(err.msg);
@@ -27,29 +31,35 @@ module.exports = function (RED) {
                 } else {
                   resolve(res);
                 }
-              });
+              }
+            );
           }
         });
       }
       var globalContext = this.context().global;
       let maya = globalContext.get("maya");
-      let clickSelector = await getValue(this.selector, this.payloadTypeSelector, msg);
-      maya.browser.page.click(this.selectorType, clickSelector, this.timeout)
+      let clickSelector = await getValue(
+        this.selector,
+        this.payloadTypeSelector,
+        msg
+      );
+      maya.browser.page
+        .click(this.selectorType, clickSelector, this.timeout)
         .then(async () => {
           await globalContext.set("maya", maya);
           node.send(msg);
           node.status({
             fill: "green",
             shape: "dot",
-            text: "completed"
+            text: "completed",
           });
         })
-        .catch(err => {
+        .catch((err) => {
           node.error(err);
           node.status({
             fill: "red",
             shape: "ring",
-            text: "error: " + err.toString().substring(0, 10) + "..."
+            text: "error: " + err.toString().substring(0, 10) + "...",
           });
         });
     });

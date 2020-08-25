@@ -23,12 +23,14 @@ module.exports = function (RED) {
       let selector1 = await getValue(
         this.selector1,
         this.payloadTypeSelector,
-        msg
+        msg,
+        RED
       );
       let selector2 = await getValue(
         this.selector2,
         this.payloadTypeSelector,
-        msg
+        msg,
+        RED
       );
 
       let selector_n = arraySelect(selector1, selector2);

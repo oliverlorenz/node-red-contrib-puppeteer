@@ -5,7 +5,9 @@
       defaults: {
         name: { value: '' },
         payload: {value:"", validate: RED.validators.typedInput("payloadType")},
-        payloadType: {value:"global"},
+        payloadType: {value:"str"},
+        selector: {value:"", validate: RED.validators.typedInput("selectorType")},
+        selectorType: {value:"str"},
         timeout: { value: 5000 },
       },
       inputs:1,
@@ -35,6 +37,25 @@
 
             $("#node-input-payload").typedInput('type',this.payloadType);
 
+            if (this.selectorType == null) {
+                if (this.selector == "") {
+                    this.selectorType = "date";
+                } else {
+                    this.selectorType = "str";
+                }
+            } else if (this.selectorType === 'string' || this.selectorType === 'none') {
+                this.selectorType = "str";
+            }
+            $("#node-input-selectorType").val(this.selectorType);
+
+            $("#node-input-selector").typedInput({
+                default: 'str',
+                typeField: $("#node-input-selectorType"),
+                types:['flow','global','msg','str']
+            });
+
+            $("#node-input-selector").typedInput('type',this.selectorType);
+
         }
     });
 </script>
@@ -44,6 +65,12 @@
     <label for="node-input-payload"><i class="fa fa-envelope"></i> <span data-i18n="common.label.payload"></span></label>
     <input type="text" id="node-input-payload" style="width:70%">
     <input type="hidden" id="node-input-payloadType">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-selector"><i class="fa fa-envelope"></i> selector</label>
+    <input type="text" id="node-input-selector" style="width:70%">
+    <input type="hidden" id="node-input-selectorType">
   </div>
   
   <div class="form-row">

@@ -18,9 +18,10 @@ module.exports = function (RED) {
       let selector = await getValue(
         this.selector,
         this.payloadTypeSelector,
-        msg
+        msg,
+        RED
       );
-      let find = await getValue(this.find, this.payloadTypeFind, msg);
+      let find = await getValue(this.find, this.payloadTypeFind, msg, RED);
       node.status({
         fill: "yellow",
         shape: "dot",

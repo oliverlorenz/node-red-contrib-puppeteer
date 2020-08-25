@@ -18,7 +18,8 @@ module.exports = function (RED) {
       let selector = await getValue(
         this.selector,
         this.payloadTypeSelector,
-        msg
+        msg,
+        RED
       );
       node.status({
         fill: "yellow",

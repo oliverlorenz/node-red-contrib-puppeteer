@@ -22,7 +22,8 @@ module.exports = function (RED) {
       var selector = await getValue(
         this.selector,
         this.payloadTypeSelector,
-        msg
+        msg,
+        RED
       );
       highlightElement(puppeteer.page, selector, "click");
       await puppeteer.page

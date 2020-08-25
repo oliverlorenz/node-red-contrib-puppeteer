@@ -6,6 +6,8 @@ module.exports = function (RED) {
     // this.text = config.text
     this.payload = config.payload;
     this.payloadType = config.payloadType;
+    this.selector = config.selector;
+    this.selectorType = config.selectorType;
     this.timeout = config.timeout;
     var node = this;
 
@@ -15,13 +17,16 @@ module.exports = function (RED) {
       // console.log(this.payloadType, this.payload);
       var globalContext = this.context().global;
       let puppeteer = globalContext.get("puppeteer");
-      let payload = await getValue(this.payload, this.payloadType, msg);
+      let payload = await getValue(this.payload, this.payloadType, msg, RED);
+      let selector = await getValue(this.selector, this.selectorType, msg, RED);
 
       node.status({
         fill: "yellow",
         shape: "dot",
         text: "typing: " + payload.toString().substring(0, 10) + "...",
       });
+
+      highlightElement(puppeteer.page, selector, "type");
       puppeteer.page.keyboard
         .type(payload)
         .then(() => {
@@ -30,6 +35,7 @@ module.exports = function (RED) {
           node.status({});
         })
         .catch((err) => {
+          console.log(err);
           node.status({
             fill: "red",
             shape: "ring",
